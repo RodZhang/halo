@@ -10,7 +10,7 @@ import android.net.*
 import android.os.Build
 import android.support.annotation.RequiresApi
 import com.rod.halo.BaseApp
-import com.rod.halo.NetBroadcastReceiver
+import com.rod.halo.NetworkReceiver
 
 /**
  *
@@ -121,7 +121,7 @@ object NetworkUtil {
 
     private fun listenNetworkStateWithBroadcastReceiver(context: Context) {
         val intentFilter = IntentFilter("android.net.conn.CONNECTIVITY_CHANGE")
-        context.registerReceiver(NetBroadcastReceiver(), intentFilter)
+        context.registerReceiver(NetworkReceiver(), intentFilter)
     }
 
     @SuppressLint("MissingPermission")
