@@ -53,11 +53,11 @@ object NetworkUtil {
     }
 
     internal fun listenNetworkState(context: Context) {
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//            listenNetworkStateWithNetworkCallback(context)
-//        } else {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            listenNetworkStateWithNetworkCallback(context)
+        } else {
             listenNetworkStateWithBroadcastReceiver(context)
-//        }
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
