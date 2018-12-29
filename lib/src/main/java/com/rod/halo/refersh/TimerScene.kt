@@ -25,7 +25,7 @@ class TimerScene(private val mLifecycleOwner: LifecycleOwner, private val mRefre
     private var mLastSuccessRefreshTime = 0L
 
     override fun needRefresh(manual: Boolean): Boolean {
-        return if (manual) manual else System.currentTimeMillis() >= mRefreshInterval
+        return if (manual) manual else System.currentTimeMillis() - mLastSuccessRefreshTime >= mRefreshInterval
     }
 
     override fun onRefreshSuccess() {

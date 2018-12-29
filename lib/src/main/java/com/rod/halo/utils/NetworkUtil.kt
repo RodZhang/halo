@@ -36,8 +36,8 @@ object NetworkUtil {
 
     internal fun onNetworkStateChanged(info: NetworkInfo) {
         //如果当前的网络连接成功并且网络连接可用
-        if (NetworkInfo.State.CONNECTED == info.getState() && info.isAvailable()) {
-            if (info.getType() == ConnectivityManager.TYPE_WIFI || info.getType() == ConnectivityManager.TYPE_MOBILE) {
+        if (NetworkInfo.State.CONNECTED == info.state && info.isAvailable) {
+            if (info.type == ConnectivityManager.TYPE_WIFI || info.type == ConnectivityManager.TYPE_MOBILE) {
                 mIsNetworkEnable.value = true
             }
         } else {

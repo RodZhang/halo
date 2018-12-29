@@ -1,4 +1,4 @@
-package com.rod.halo
+package com.rod.halo.simple
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -20,7 +20,7 @@ class MainActivity : AppCompatActivity(), RefreshWrapperCallback {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        mAdapter = ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
+        mAdapter = ArrayAdapter(this, android.R.layout.simple_list_item_1,
                 android.R.id.text1, (0 until 100).map { "item $it" })
         list_view.adapter = mAdapter
 

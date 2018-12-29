@@ -20,7 +20,7 @@ class NetBroadcastReceiver : BroadcastReceiver() {
         if (intent == null) {
             return
         }
-        if (WifiManager.WIFI_STATE_CHANGED_ACTION == intent.getAction()) {// 监听wifi的打开与关闭，与wifi的连接无关
+        if (WifiManager.WIFI_STATE_CHANGED_ACTION == intent.action) {// 监听wifi的打开与关闭，与wifi的连接无关
             val wifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, 0)
             Log.e("TAG", "wifiState:$wifiState")
             when (wifiState) {
@@ -31,7 +31,7 @@ class NetBroadcastReceiver : BroadcastReceiver() {
             }
         }
         // 监听网络连接，包括wifi和移动数据的打开和关闭,以及连接上可用的连接都会接到监听
-        if (ConnectivityManager.CONNECTIVITY_ACTION == intent.getAction()) {
+        if (ConnectivityManager.CONNECTIVITY_ACTION == intent.action) {
             //获取联网状态的NetworkInfo对象
             val info = intent.getParcelableExtra<NetworkInfo>(ConnectivityManager.EXTRA_NETWORK_INFO)
             if (info != null) {
