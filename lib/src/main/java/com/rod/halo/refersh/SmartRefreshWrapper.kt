@@ -3,9 +3,9 @@ package com.rod.halo.refersh
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import com.rod.halo.refersh.abs.RefreshScene
+import com.rod.halo.refersh.abs.RefreshCallback
+import com.rod.halo.refersh.scene.RefreshScene
 import com.rod.halo.refersh.abs.RefreshWrapper
-import com.rod.halo.refersh.abs.RefreshWrapperCallback
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 
 /**
@@ -25,7 +25,7 @@ class SmartRefreshWrapper internal constructor() : RefreshWrapper {
      */
     private val mRefreshScenes: ArrayList<RefreshScene> = ArrayList()
     private var mRefreshLayout: SmartRefreshLayout? = null
-    private var mRefreshCallback: RefreshWrapperCallback? = null
+    private var mRefreshCallback: RefreshCallback? = null
 
     override fun wrapper(viewNeedRefresh: View) {
         if (mRefreshLayout != null && mRefreshLayout!!.childCount > 0) {
@@ -55,8 +55,8 @@ class SmartRefreshWrapper internal constructor() : RefreshWrapper {
         }
     }
 
-    override fun setRefreshCallback(refreshWrapperCallback: RefreshWrapperCallback?) {
-        mRefreshCallback = refreshWrapperCallback
+    override fun setRefreshCallback(refreshCallback: RefreshCallback?) {
+        mRefreshCallback = refreshCallback
     }
 
     override fun onRefreshSuccess() {

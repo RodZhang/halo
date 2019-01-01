@@ -1,7 +1,6 @@
-package com.rod.halo.refersh
+package com.rod.halo.refersh.scene
 
 import com.rod.halo.refersh.abs.RefreshAble
-import com.rod.halo.refersh.abs.RefreshScene
 
 /**
  *

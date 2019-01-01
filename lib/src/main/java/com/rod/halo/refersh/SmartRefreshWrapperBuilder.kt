@@ -1,8 +1,8 @@
 package com.rod.halo.refersh
 
 import android.view.View
-import com.rod.halo.refersh.abs.RefreshScene
-import com.rod.halo.refersh.abs.RefreshWrapperCallback
+import com.rod.halo.refersh.scene.RefreshScene
+import com.rod.halo.refersh.abs.RefreshCallback
 
 /**
  *
@@ -16,15 +16,15 @@ class SmartRefreshWrapperBuilder private constructor(private val mRefreshView: V
     }
 
     private val mRefreshSceneList = ArrayList<RefreshScene>()
-    private var mRefreshWrapperCallback: RefreshWrapperCallback? = null
+    private var mRefreshCallback: RefreshCallback? = null
 
     fun putRefreshScene(refreshScene: RefreshScene): SmartRefreshWrapperBuilder {
         mRefreshSceneList.add(refreshScene)
         return this
     }
 
-    fun setRefreshCallback(callback: RefreshWrapperCallback?): SmartRefreshWrapperBuilder {
-        mRefreshWrapperCallback = callback
+    fun setRefreshCallback(callback: RefreshCallback?): SmartRefreshWrapperBuilder {
+        mRefreshCallback = callback
         return this
     }
 
@@ -33,7 +33,7 @@ class SmartRefreshWrapperBuilder private constructor(private val mRefreshView: V
         with(smartRefreshWrapper) {
             wrapper(mRefreshView)
             setRefreshScene(mRefreshSceneList)
-            this.setRefreshCallback(mRefreshWrapperCallback)
+            this.setRefreshCallback(mRefreshCallback)
         }
 
         return smartRefreshWrapper

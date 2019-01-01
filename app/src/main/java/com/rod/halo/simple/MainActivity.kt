@@ -4,14 +4,14 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import com.rod.halo.refersh.NetworkChangeScene
+import com.rod.halo.refersh.scene.NetworkChangeScene
 import com.rod.halo.refersh.SmartRefreshWrapperBuilder
-import com.rod.halo.refersh.TimerScene
+import com.rod.halo.refersh.scene.TimerScene
 import com.rod.halo.refersh.abs.RefreshWrapper
-import com.rod.halo.refersh.abs.RefreshWrapperCallback
+import com.rod.halo.refersh.abs.RefreshCallback
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), RefreshWrapperCallback {
+class MainActivity : AppCompatActivity(), RefreshCallback {
 
     private lateinit var mAdapter: ArrayAdapter<String>
     private lateinit var mRefreshWrapper: RefreshWrapper

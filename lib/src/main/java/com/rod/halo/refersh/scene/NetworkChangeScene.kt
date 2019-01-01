@@ -1,4 +1,4 @@
-package com.rod.halo.refersh
+package com.rod.halo.refersh.scene
 
 import android.arch.lifecycle.*
 import android.util.Log

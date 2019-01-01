@@ -1,4 +1,4 @@
-package com.rod.halo.refersh
+package com.rod.halo.refersh.scene
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
@@ -11,7 +11,8 @@ import java.util.concurrent.TimeUnit
  * @author Rod
  * @date 2018/12/15
  */
-class TimerScene(private val mLifecycleOwner: LifecycleOwner, private val mRefreshInterval: Long = DEFAULT_REFRESH_INTERVAL)
+class TimerScene(private val mLifecycleOwner: LifecycleOwner,
+                 private val mRefreshInterval: Long = DEFAULT_REFRESH_INTERVAL)
     : BaseRefreshScene(), LifecycleObserver {
 
     init {

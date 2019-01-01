@@ -1,6 +1,7 @@
 package com.rod.halo.refersh.abs
 
 import android.view.View
+import com.rod.halo.refersh.scene.RefreshScene
 
 /**
  *
@@ -13,7 +14,7 @@ interface RefreshWrapper : RefreshAble {
 
     fun setRefreshScene(refreshScenes: ArrayList<RefreshScene>)
 
-    fun setRefreshCallback(refreshWrapperCallback: RefreshWrapperCallback?)
+    fun setRefreshCallback(refreshCallback: RefreshCallback?)
 
     fun onRefreshSuccess()
 }
