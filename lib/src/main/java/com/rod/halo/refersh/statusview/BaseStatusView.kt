@@ -20,9 +20,9 @@ abstract class BaseStatusView : StatusView {
         mContainerInfo = containerInfo
     }
 
-    override fun show() {
+    override fun attachToContainer() {
         if (mContainerInfo == null || !mContainerInfo!!.isValid()) {
-            RL.e(getTag(), "show, mContainerInfo is invalid")
+            RL.e(getTag(), "attachToContainer, mContainerInfo is invalid")
             return
         }
         val containerInfo = checkNotNull(mContainerInfo)
@@ -35,13 +35,15 @@ abstract class BaseStatusView : StatusView {
         containerInfo.container.addView(view, containerInfo.index)
     }
 
-    override fun hide() {
+    override fun detachFromContainer() {
         UIUtil.removeFromParent(mView)
     }
 
     override fun setOnViewClickListener(listener: StatusView.OnViewClickListener?) {
         mViewClickListener = listener
     }
+
+    override fun getView() = mView
 
     abstract fun createView(container: ViewGroup): View
 

@@ -29,4 +29,5 @@ class ServerErrorView : BaseStatusView() {
 
     override fun getTag() = TAG
 
+    override fun getFlag() = StatusView.StatusFlag.SERVICE_ERR
 }

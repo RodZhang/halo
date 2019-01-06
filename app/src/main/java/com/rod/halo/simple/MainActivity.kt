@@ -4,11 +4,15 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import com.rod.halo.refersh.scene.NetworkChangeScene
 import com.rod.halo.refersh.SmartRefreshWrapperBuilder
-import com.rod.halo.refersh.scene.TimerScene
-import com.rod.halo.refersh.abs.RefreshWrapper
 import com.rod.halo.refersh.abs.RefreshCallback
+import com.rod.halo.refersh.abs.RefreshWrapper
+import com.rod.halo.refersh.scene.NetworkChangeScene
+import com.rod.halo.refersh.scene.TimerScene
+import com.rod.halo.refersh.statusview.EmptyView
+import com.rod.halo.refersh.statusview.LoadingView
+import com.rod.halo.refersh.statusview.NetworkErrorView
+import com.rod.halo.refersh.statusview.ServerErrorView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), RefreshCallback {
@@ -27,13 +31,19 @@ class MainActivity : AppCompatActivity(), RefreshCallback {
         mRefreshWrapper = SmartRefreshWrapperBuilder.newInstance(list_view)
                 .putRefreshScene(TimerScene(this, 10000))
                 .putRefreshScene(NetworkChangeScene(this))
+                .putStatusView(NetworkErrorView())
+                .putStatusView(ServerErrorView())
+                .putStatusView(EmptyView())
+                .putStatusView(LoadingView())
                 .setRefreshCallback(this)
                 .build()
-        mRefreshWrapper.refresh(true)
+        container.setOnClickListener { mRefreshWrapper.refresh(true) }
     }
 
     override fun startRefresh() {
-        Toast.makeText(this, "startRefresh", Toast.LENGTH_SHORT).show()
-        mRefreshWrapper.onRefreshSuccess()
+        container.postDelayed({
+            Toast.makeText(this, "startRefresh", Toast.LENGTH_SHORT).show()
+            mRefreshWrapper.onRefreshSuccess()
+        }, 3000)
     }
 }

@@ -1,5 +1,7 @@
 package com.rod.halo.refersh.statusview
 
+import android.view.View
+
 /**
  *
  * @author Rod
@@ -9,11 +11,19 @@ interface StatusView {
 
     fun setContainerInfo(containerInfo: ContainerInfo)
 
-    fun show()
+    fun attachToContainer()
 
-    fun hide()
+    fun detachFromContainer()
 
     fun setOnViewClickListener(listener: OnViewClickListener?)
+
+    fun getView(): View?
+
+    fun getFlag(): StatusFlag
+
+    enum class StatusFlag {
+        LOADING, NORMAL, EMPTY, NETWORK_ERR, SERVICE_ERR
+    }
 
     interface OnViewClickListener {
         fun onClickView()
