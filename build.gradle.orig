@@ -9,9 +9,9 @@ buildscript {
     }
     dependencies {
 <<<<<<< Updated upstream
-        classpath 'com.android.tools.build:gradle:3.3.0-rc03'
-=======
         classpath 'com.android.tools.build:gradle:3.3.0'
+=======
+        classpath 'com.android.tools.build:gradle:3.3.1'
 >>>>>>> Stashed changes
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
 
