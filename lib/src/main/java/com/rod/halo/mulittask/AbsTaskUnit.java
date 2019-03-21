@@ -11,7 +11,7 @@ import java.util.concurrent.Future;
  * @author Rod
  * @date 2019/3/5
  */
-public abstract class TaskItem<I, O> {
+public abstract class AbsTaskUnit<I, O> {
 
     private final byte[] mLock = new byte[0];
     private volatile I mResult;

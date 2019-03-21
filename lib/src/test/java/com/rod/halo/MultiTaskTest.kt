@@ -1,7 +1,7 @@
 package com.rod.halo
 
-import com.rod.halo.mulittask.MulitTask
-import com.rod.halo.mulittask.TaskItem
+import com.rod.halo.mulittask.MultiTask
+import com.rod.halo.mulittask.AbsTaskUnit
 import org.junit.Test
 import java.util.concurrent.Executors
 
@@ -10,12 +10,12 @@ import java.util.concurrent.Executors
  * @author Rod
  * @date 2019/3/5
  */
-class MulitTaskTest {
+class MultiTaskTest {
 
     companion object {
         val EXECUTOR = Executors.newCachedThreadPool()
-        fun getNameTask(): TaskItem<NameInfo, MyResp> {
-            return object : TaskItem<NameInfo, MyResp>() {
+        fun getNameTask(): AbsTaskUnit<NameInfo, MyResp> {
+            return object : AbsTaskUnit<NameInfo, MyResp>() {
                 override fun doTask() {
                     getNameFunction(this).execute()
                 }
@@ -28,8 +28,8 @@ class MulitTaskTest {
             }
         }
 
-        fun getAgeTask(): TaskItem<AgeInfo, MyResp> {
-            return object : TaskItem<AgeInfo, MyResp>() {
+        fun getAgeTask(): AbsTaskUnit<AgeInfo, MyResp> {
+            return object : AbsTaskUnit<AgeInfo, MyResp>() {
                 override fun doTask() {
                     getAgeFunction(this).execute()
                 }
@@ -42,14 +42,14 @@ class MulitTaskTest {
             }
         }
 
-        private fun getNameFunction(task: TaskItem<NameInfo, MyResp>): FakeHttpFunction<NameInfo> {
+        private fun getNameFunction(absTask: AbsTaskUnit<NameInfo, MyResp>): FakeHttpFunction<NameInfo> {
             return object : FakeHttpFunction<NameInfo>(object : FunctionCallback<NameInfo> {
                 override fun onResponse(rsp: NameInfo) {
-                    task.taskEnd(rsp)
+                    absTask.taskEnd(rsp)
                 }
 
                 override fun onError() {
-                    task.taskEnd(null)
+                    absTask.taskEnd(null)
                 }
 
             }) {
@@ -60,14 +60,14 @@ class MulitTaskTest {
             }
         }
 
-        private fun getAgeFunction(task: TaskItem<AgeInfo, MyResp>): FakeHttpFunction<AgeInfo> {
+        private fun getAgeFunction(absTask: AbsTaskUnit<AgeInfo, MyResp>): FakeHttpFunction<AgeInfo> {
             return object : FakeHttpFunction<AgeInfo>(object : FunctionCallback<AgeInfo> {
                 override fun onResponse(rsp: AgeInfo) {
-                    task.taskEnd(rsp)
+                    absTask.taskEnd(rsp)
                 }
 
                 override fun onError() {
-                    task.taskEnd(null)
+                    absTask.taskEnd(null)
                 }
 
             }) {
@@ -80,7 +80,7 @@ class MulitTaskTest {
     }
 
     @Test
-    fun testMulitTask() = MulitTask(MyResp())
+    fun testMulitTask() = MultiTask(MyResp())
             .addTask(getNameTask())
             .addTask(getAgeTask())
             .start {
