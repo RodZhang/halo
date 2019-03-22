@@ -1,8 +1,10 @@
 package com.rod.halo
 
+import android.support.test.runner.AndroidJUnit4
 import com.rod.halo.mulittask.MultiTask
 import com.rod.halo.mulittask.AbsTaskUnit
 import org.junit.Test
+import org.junit.runner.RunWith
 import java.util.concurrent.Executors
 
 /**
@@ -10,6 +12,7 @@ import java.util.concurrent.Executors
  * @author Rod
  * @date 2019/3/5
  */
+@RunWith(AndroidJUnit4::class)
 class MultiTaskTest {
 
     companion object {
@@ -80,12 +83,18 @@ class MultiTaskTest {
     }
 
     @Test
-    fun testMulitTask() = MultiTask(MyResp())
-            .addTask(getNameTask())
-            .addTask(getAgeTask())
-            .start {
-                println(it.toString())
-            }
+    fun testMultiTask() {
+        val startTime = System.currentTimeMillis()
+        println("current thread=${Thread.currentThread()}")
+        MultiTask(MyResp())
+                .addTask(getNameTask())
+                .addTask(getAgeTask())
+                .start {
+                    println(it.toString())
+                    println("callback thread=${Thread.currentThread()}")
+                }
+        println("cost ${System.currentTimeMillis() - startTime} ms")
+    }
 
     abstract class FakeHttpFunction<R>(private val callback: FunctionCallback<R>) {
 

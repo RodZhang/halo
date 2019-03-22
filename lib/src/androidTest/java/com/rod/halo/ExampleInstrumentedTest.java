@@ -3,6 +3,9 @@ package com.rod.halo;
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
+import android.util.Log;
+
+import com.rod.halo.mulittask.MultiTask;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,5 +25,27 @@ public class ExampleInstrumentedTest {
         Context appContext = InstrumentationRegistry.getTargetContext();
 
         assertEquals("com.rod.halo.test", appContext.getPackageName());
+    }
+
+    @Test
+    public void testMultiTask() throws InterruptedException {
+        long startTime = System.currentTimeMillis();
+        println("current thread=" + Thread.currentThread());
+        new MultiTask<>(new MultiTaskTest.MyResp())
+                .addTask(MultiTaskTest.Companion.getNameTask())
+                .addTask(MultiTaskTest.Companion.getAgeTask())
+                .start(new MultiTask.OnTaskFinishCallback<MultiTaskTest.MyResp>() {
+                    @Override
+                    public void onTaskFinish(MultiTaskTest.MyResp o) {
+                        println(o.toString());
+                        println("callback thread=" + Thread.currentThread());
+                    }
+                });
+        println("cost " + (System.currentTimeMillis() - startTime) + " ms");
+        Thread.sleep(10000);
+    }
+
+    private void println(String msg) {
+        Log.d("ExampleInstrumentedTest", msg);
     }
 }

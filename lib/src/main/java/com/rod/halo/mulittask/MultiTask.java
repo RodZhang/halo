@@ -1,6 +1,11 @@
 package com.rod.halo.mulittask;
 
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
+import android.os.Process;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +18,8 @@ import java.util.concurrent.Executors;
  */
 public class MultiTask<R> {
     private static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(10);
+    private static final Handler WORK_HANDLER = newWorkHandler();
+    private static final Handler UI_HANDLER = new Handler(Looper.getMainLooper());
 
     private final R mRsp;
     private final List<AbsTaskUnit<?, R>> mTasks = new ArrayList<>();
@@ -27,17 +34,33 @@ public class MultiTask<R> {
         return this;
     }
 
-    public void start(@NonNull OnTaskFinishCallback<R> callback) {
-        long start = System.currentTimeMillis();
+    public void start(@NonNull final OnTaskFinishCallback<R> callback) {
+        final long start = System.currentTimeMillis();
         for (AbsTaskUnit task : mTasks) {
             task.doTaskInner(EXECUTOR);
         }
-        // TODO: 2019/3/5 这里会阻塞调用线程，需要增加线程切换方法
-        for (AbsTaskUnit<?, R> task : mTasks) {
-            task.transformInner(mRsp);
-        }
-        System.out.println("task cost " + (System.currentTimeMillis() - start) + "ms");
-        callback.onTaskFinish(mRsp);
+        WORK_HANDLER.post(new Runnable() {
+            @Override
+            public void run() {
+                long transformStart = System.currentTimeMillis();
+                for (AbsTaskUnit<?, R> task : mTasks) {
+                    task.transformInner(mRsp);
+                }
+
+                UI_HANDLER.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        callback.onTaskFinish(mRsp);
+                    }
+                });
+            }
+        });
+    }
+
+    private static Handler newWorkHandler() {
+        HandlerThread handlerThread = new HandlerThread("MultiTaskThread", Process.THREAD_PRIORITY_LOWEST);
+        handlerThread.start();
+        return new Handler(handlerThread.getLooper());
     }
 
     public interface OnTaskFinishCallback<Rsp> {
