@@ -1,7 +1,8 @@
-package com.rod.halo.refersh.scene
+package com.rod.halo.simple.refresh.scene
 
 import android.arch.lifecycle.*
 import android.util.Log
+import com.rod.halo.refersh.scene.BaseRefreshScene
 import com.rod.halo.utils.NetworkUtil
 
 /**

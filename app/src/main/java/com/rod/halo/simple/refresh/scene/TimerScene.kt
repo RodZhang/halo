@@ -1,9 +1,10 @@
-package com.rod.halo.refersh.scene
+package com.rod.halo.simple.refresh.scene
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.LifecycleOwner
 import android.arch.lifecycle.OnLifecycleEvent
+import com.rod.halo.refersh.scene.BaseRefreshScene
 import java.util.concurrent.TimeUnit
 
 /**

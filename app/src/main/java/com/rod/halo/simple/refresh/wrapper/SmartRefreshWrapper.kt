@@ -1,4 +1,4 @@
-package com.rod.halo.refersh
+package com.rod.halo.simple.refresh.wrapper
 
 import android.util.Log
 import android.view.View
@@ -37,15 +37,20 @@ class SmartRefreshWrapper internal constructor() : RefreshWrapper {
             throw IllegalStateException("view($viewNeedRefresh) has added")
         }
 
-        mRefreshLayout = SmartRefreshLayout(viewNeedRefresh.context)
+        val refreshLayout = SmartRefreshLayout(viewNeedRefresh.context)
+        replaceView(viewNeedRefresh, refreshLayout)
+        mRefreshLayout = refreshLayout
 
+        refreshLayout.setOnRefreshListener { refresh(true) }
+    }
+
+    private fun replaceView(viewNeedRefresh: View, refreshLayout: SmartRefreshLayout) {
         val parent = viewNeedRefresh.parent as ViewGroup
         val indexOfRefreshView = parent.indexOfChild(viewNeedRefresh)
-
         mContainerInfo = ContainerInfo(parent, indexOfRefreshView)
-
         parent.removeView(viewNeedRefresh)
-        mRefreshLayout!!.addView(viewNeedRefresh)
+        refreshLayout.setRefreshContent(viewNeedRefresh)
+        parent.addView(refreshLayout, indexOfRefreshView)
     }
 
     override fun getWrapperView() = mRefreshLayout
@@ -84,6 +89,7 @@ class SmartRefreshWrapper internal constructor() : RefreshWrapper {
     override fun onRefreshSuccess() {
         mRefreshScenes.forEach { it.onRefreshSuccess() }
         showStatus(StatusView.StatusFlag.NORMAL)
+        mRefreshLayout?.finishRefresh()
     }
 
     override fun onRefreshError(status: StatusView.StatusFlag, reason: Int) {
