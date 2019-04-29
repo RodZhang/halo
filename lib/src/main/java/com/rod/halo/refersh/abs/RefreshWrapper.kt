@@ -13,7 +13,7 @@ interface RefreshWrapper : RefreshAble {
 
     fun wrapper(viewNeedRefresh: View)
 
-    fun getWrapperView(): View?
+    fun getWrapperView(): View
 
     fun setRefreshScene(refreshScenes: ArrayList<RefreshScene>)
 

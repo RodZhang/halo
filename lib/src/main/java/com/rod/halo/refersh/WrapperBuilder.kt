@@ -42,8 +42,7 @@ class WrapperBuilder private constructor(private val mRefreshView: View) {
         with(refreshWrapper) {
             wrapper(mRefreshView)
             setRefreshScene(mRefreshSceneList)
-
-            mStatusViewList.add(ContentView(mRefreshView))
+            mStatusViewList.add(ContentView(getWrapperView()))
             setStatusView(mStatusViewList)
             this.setRefreshCallback(mRefreshCallback)
         }

@@ -28,20 +28,22 @@ class SmartRefreshWrapper internal constructor() : RefreshWrapper {
     private val mRefreshScenes: ArrayList<RefreshScene> = ArrayList()
     private val mStatusView: ArrayList<StatusView> = ArrayList()
     private var mCurrentStatusView: StatusView? = null
-    private var mRefreshLayout: SmartRefreshLayout? = null
+    private lateinit var mRefreshLayout: SmartRefreshLayout
     private var mRefreshCallback: RefreshCallback? = null
     private var mContainerInfo: ContainerInfo? = null
 
     override fun wrapper(viewNeedRefresh: View) {
-        if (mRefreshLayout != null && mRefreshLayout!!.childCount > 0) {
-            throw IllegalStateException("view($viewNeedRefresh) has added")
-        }
-
-        val refreshLayout = SmartRefreshLayout(viewNeedRefresh.context)
+        val refreshLayout = initRefreshLayout(viewNeedRefresh)
         replaceView(viewNeedRefresh, refreshLayout)
         mRefreshLayout = refreshLayout
+    }
 
+    private fun initRefreshLayout(viewNeedRefresh: View): SmartRefreshLayout {
+        val refreshLayout = SmartRefreshLayout(viewNeedRefresh.context)
+        refreshLayout.setDisableContentWhenLoading(true)
+        refreshLayout.setDisableContentWhenRefresh(true)
         refreshLayout.setOnRefreshListener { refresh(true) }
+        return refreshLayout
     }
 
     private fun replaceView(viewNeedRefresh: View, refreshLayout: SmartRefreshLayout) {
@@ -53,7 +55,10 @@ class SmartRefreshWrapper internal constructor() : RefreshWrapper {
         parent.addView(refreshLayout, indexOfRefreshView)
     }
 
-    override fun getWrapperView() = mRefreshLayout
+    override fun getWrapperView(): View {
+        checkNotNull(mRefreshLayout) { "call wrapper at first" }
+        return mRefreshLayout
+    }
 
     override fun setRefreshScene(refreshScenes: ArrayList<RefreshScene>) {
         mRefreshScenes.forEach { it.setRefreshAble(null) }
