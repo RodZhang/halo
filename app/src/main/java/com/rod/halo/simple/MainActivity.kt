@@ -9,12 +9,10 @@ import com.rod.halo.refersh.WrapperBuilder
 import com.rod.halo.refersh.abs.RefreshCallback
 import com.rod.halo.refersh.abs.RefreshWrapper
 import com.rod.halo.simple.refresh.scene.NetworkChangeScene
-import com.rod.halo.refersh.statusview.EmptyView
-import com.rod.halo.refersh.statusview.LoadingView
-import com.rod.halo.refersh.statusview.NetworkErrorView
-import com.rod.halo.refersh.statusview.ServerErrorView
 import com.rod.halo.simple.refresh.scene.TimerScene
+import com.rod.halo.simple.refresh.statusview.*
 import com.rod.halo.simple.refresh.wrapper.SmartRefreshWrapper
+import com.rod.halo.statusview.ViewStatus
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), RefreshCallback {
@@ -36,16 +34,19 @@ class MainActivity : AppCompatActivity(), RefreshCallback {
         mRefreshWrapper = WrapperBuilder.newInstance(list_view)
                 .putRefreshScene(TimerScene(this, 10000))
                 .putRefreshScene(NetworkChangeScene(this))
-                .putStatusView(NetworkErrorView())
-                .putStatusView(ServerErrorView())
-                .putStatusView(EmptyView())
-                .putStatusView(LoadingView())
+                .putStatusView(NetworkErrView(this))
+                .putStatusView(ServerErrView(this))
+                .putStatusView(EmptyView(this))
+                .putStatusView(LoadingView(this))
                 .setRefreshCallback(this)
                 .build(SmartRefreshWrapper::class.java)
         container.setOnClickListener { mRefreshWrapper.refresh(true) }
     }
 
     override fun startRefresh() {
+        if (mAdapter.isEmpty) {
+            mRefreshWrapper.showStatusView(ViewStatus.LOADING)
+        }
         container.postDelayed({
             mAdapter.addAll((0 until 100).mapIndexed { index, _ -> "item $index" })
             mRefreshWrapper.onRefreshSuccess()

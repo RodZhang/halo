@@ -4,8 +4,7 @@ import android.view.View
 import com.rod.halo.refersh.abs.RefreshCallback
 import com.rod.halo.refersh.abs.RefreshWrapper
 import com.rod.halo.refersh.scene.RefreshScene
-import com.rod.halo.refersh.statusview.ContentView
-import com.rod.halo.refersh.statusview.StatusView
+import com.rod.halo.statusview.StatusView
 
 /**
  *
@@ -42,7 +41,6 @@ class WrapperBuilder private constructor(private val mRefreshView: View) {
         with(refreshWrapper) {
             wrapper(mRefreshView)
             setRefreshScene(mRefreshSceneList)
-            mStatusViewList.add(ContentView(getWrapperView()))
             setStatusView(mStatusViewList)
             this.setRefreshCallback(mRefreshCallback)
         }

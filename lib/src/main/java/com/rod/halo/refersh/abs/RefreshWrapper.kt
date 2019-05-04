@@ -2,7 +2,7 @@ package com.rod.halo.refersh.abs
 
 import android.view.View
 import com.rod.halo.refersh.scene.RefreshScene
-import com.rod.halo.refersh.statusview.StatusView
+import com.rod.halo.statusview.StatusView
 
 /**
  *
@@ -21,9 +21,7 @@ interface RefreshWrapper : RefreshAble {
 
     fun setRefreshCallback(refreshCallback: RefreshCallback?)
 
+    fun showStatusView(id: String)
+
     fun onRefreshSuccess()
-
-    fun onRefreshError(status: StatusView.StatusFlag, reason: Int)
-
-    fun showStatus(statusFlag: StatusView.StatusFlag)
 }

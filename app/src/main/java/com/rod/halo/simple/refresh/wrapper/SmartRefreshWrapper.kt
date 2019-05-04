@@ -6,8 +6,10 @@ import android.view.ViewGroup
 import com.rod.halo.refersh.abs.RefreshCallback
 import com.rod.halo.refersh.abs.RefreshWrapper
 import com.rod.halo.refersh.scene.RefreshScene
-import com.rod.halo.refersh.statusview.ContainerInfo
-import com.rod.halo.refersh.statusview.StatusView
+import com.rod.halo.statusview.ContentView
+import com.rod.halo.statusview.StatusView
+import com.rod.halo.statusview.StatusViewController
+import com.rod.halo.statusview.ViewStatus
 import com.scwang.smartrefresh.layout.SmartRefreshLayout
 
 /**
@@ -26,11 +28,10 @@ class SmartRefreshWrapper internal constructor() : RefreshWrapper {
      * 每种类型的刷新场景应该最多只有一个
      */
     private val mRefreshScenes: ArrayList<RefreshScene> = ArrayList()
-    private val mStatusView: ArrayList<StatusView> = ArrayList()
-    private var mCurrentStatusView: StatusView? = null
     private lateinit var mRefreshLayout: SmartRefreshLayout
     private var mRefreshCallback: RefreshCallback? = null
-    private var mContainerInfo: ContainerInfo? = null
+
+    private val mStatusViewController = StatusViewController()
 
     override fun wrapper(viewNeedRefresh: View) {
         val refreshLayout = initRefreshLayout(viewNeedRefresh)
@@ -49,10 +50,13 @@ class SmartRefreshWrapper internal constructor() : RefreshWrapper {
     private fun replaceView(viewNeedRefresh: View, refreshLayout: SmartRefreshLayout) {
         val parent = viewNeedRefresh.parent as ViewGroup
         val indexOfRefreshView = parent.indexOfChild(viewNeedRefresh)
-        mContainerInfo = ContainerInfo(parent, indexOfRefreshView)
         parent.removeView(viewNeedRefresh)
+
         refreshLayout.setRefreshContent(viewNeedRefresh)
-        parent.addView(refreshLayout, indexOfRefreshView)
+        with(mStatusViewController) {
+            setHost(parent, indexOfRefreshView)
+            putStatusView(ContentView(refreshLayout))
+        }
     }
 
     override fun getWrapperView(): View {
@@ -68,19 +72,13 @@ class SmartRefreshWrapper internal constructor() : RefreshWrapper {
     }
 
     override fun setStatusView(statusViews: ArrayList<StatusView>) {
-        // TODO: 需要判断
-        // TODO: 需要考虑下这里的container和index 应该如何合理的获取到
-        val containerInfo = mContainerInfo
-        if (containerInfo != null) {
-            statusViews.asSequence().forEach { it.setContainerInfo(containerInfo) }
-        }
-        mStatusView.addAll(statusViews)
+        statusViews.asSequence()
+                .forEach { mStatusViewController.putStatusView(it) }
     }
 
     override fun refresh(manual: Boolean) {
         // TODO: if is refreshing, do something
         if (canRefresh(manual)) {
-            showStatus(StatusView.StatusFlag.LOADING)
             mRefreshCallback?.startRefresh()
         } else {
             // TODO: find out why can not refresh and show specific view
@@ -91,21 +89,18 @@ class SmartRefreshWrapper internal constructor() : RefreshWrapper {
         mRefreshCallback = refreshCallback
     }
 
+    override fun showStatusView(id: String) {
+        mStatusViewController.showStatusView(id)
+    }
+
     override fun onRefreshSuccess() {
         mRefreshScenes.forEach { it.onRefreshSuccess() }
-        showStatus(StatusView.StatusFlag.NORMAL)
-        mRefreshLayout?.finishRefresh()
+        showStatus(ViewStatus.CONTENT)
+        mRefreshLayout.finishRefresh()
     }
 
-    override fun onRefreshError(status: StatusView.StatusFlag, reason: Int) {
-        // TODO: check current view and decide to switch view
-        showStatus(status)
-    }
-
-    override fun showStatus(statusFlag: StatusView.StatusFlag) {
-        mCurrentStatusView?.detachFromContainer()
-        mCurrentStatusView = mStatusView.find { it.getFlag() == statusFlag }
-        mCurrentStatusView?.attachToContainer()
+    fun showStatus(status: String) {
+        mStatusViewController.showStatusView(status)
     }
 
     private fun canRefresh(manual: Boolean): Boolean {
