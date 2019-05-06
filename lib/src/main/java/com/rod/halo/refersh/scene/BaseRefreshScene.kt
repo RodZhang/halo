@@ -1,6 +1,6 @@
 package com.rod.halo.refersh.scene
 
-import com.rod.halo.refersh.abs.RefreshAble
+import com.rod.halo.refersh.abs.RefreshLayoutAdapter
 
 /**
  *
@@ -9,10 +9,10 @@ import com.rod.halo.refersh.abs.RefreshAble
  */
 abstract class BaseRefreshScene : RefreshScene {
 
-    private var mRefreshAble: RefreshAble? = null
+    private var mRefreshLayoutAdapter: RefreshLayoutAdapter? = null
 
-    override fun setRefreshAble(refreshAble: RefreshAble?) {
-        mRefreshAble = refreshAble
+    override fun setRefreshAble(refreshLayoutAdapter: RefreshLayoutAdapter?) {
+        mRefreshLayoutAdapter = refreshLayoutAdapter
     }
 
     override fun onRefreshSuccess() {
@@ -20,7 +20,7 @@ abstract class BaseRefreshScene : RefreshScene {
     }
 
     protected fun refresh() {
-        mRefreshAble?.refresh(false)
+        mRefreshLayoutAdapter?.refresh(false)
     }
 
 }

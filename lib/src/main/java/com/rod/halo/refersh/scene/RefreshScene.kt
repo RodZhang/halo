@@ -1,6 +1,6 @@
 package com.rod.halo.refersh.scene
 
-import com.rod.halo.refersh.abs.RefreshAble
+import com.rod.halo.refersh.abs.RefreshLayoutAdapter
 
 /**
  *
@@ -9,7 +9,7 @@ import com.rod.halo.refersh.abs.RefreshAble
  */
 interface RefreshScene {
 
-    fun setRefreshAble(refreshAble: RefreshAble?)
+    fun setRefreshAble(refreshLayoutAdapter: RefreshLayoutAdapter?)
 
     fun needRefresh(manual: Boolean): Boolean
 
