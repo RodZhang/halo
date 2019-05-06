@@ -9,7 +9,7 @@ import com.rod.halo.statusview.StatusView
  * @author Rod
  * @date 2018/12/15
  */
-interface RefreshWrapper : RefreshAble {
+interface RefreshWrapper {
 
     fun wrapper(viewNeedRefresh: View)
 

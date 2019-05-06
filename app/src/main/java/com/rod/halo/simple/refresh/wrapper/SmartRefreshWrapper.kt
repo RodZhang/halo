@@ -43,7 +43,7 @@ class SmartRefreshWrapper internal constructor() : RefreshWrapper {
         val refreshLayout = SmartRefreshLayout(viewNeedRefresh.context)
         refreshLayout.setDisableContentWhenLoading(true)
         refreshLayout.setDisableContentWhenRefresh(true)
-        refreshLayout.setOnRefreshListener { refresh(true) }
+//        refreshLayout.setOnRefreshListener { refresh(true) }
         return refreshLayout
     }
 
@@ -65,10 +65,10 @@ class SmartRefreshWrapper internal constructor() : RefreshWrapper {
     }
 
     override fun setRefreshScene(refreshScenes: ArrayList<RefreshScene>) {
-        mRefreshScenes.forEach { it.setRefreshAble(null) }
-        mRefreshScenes.clear()
-        mRefreshScenes.addAll(refreshScenes)
-        mRefreshScenes.forEach { it.setRefreshAble(this) }
+//        mRefreshScenes.forEach { it.setRefreshAble(null) }
+//        mRefreshScenes.clear()
+//        mRefreshScenes.addAll(refreshScenes)
+//        mRefreshScenes.forEach { it.setRefreshAble(this) }
     }
 
     override fun setStatusView(statusViews: ArrayList<StatusView>) {
@@ -76,14 +76,14 @@ class SmartRefreshWrapper internal constructor() : RefreshWrapper {
                 .forEach { mStatusViewController.putStatusView(it) }
     }
 
-    override fun refresh(manual: Boolean) {
-        // TODO: if is refreshing, do something
-        if (canRefresh(manual)) {
-            mRefreshCallback?.startRefresh()
-        } else {
-            // TODO: find out why can not refresh and show specific view
-        }
-    }
+//    override fun refresh(manual: Boolean) {
+//        // TODO: if is refreshing, do something
+//        if (canRefresh(manual)) {
+//            mRefreshCallback?.startRefresh()
+//        } else {
+//            // TODO: find out why can not refresh and show specific view
+//        }
+//    }
 
     override fun setRefreshCallback(refreshCallback: RefreshCallback?) {
         mRefreshCallback = refreshCallback
@@ -95,12 +95,8 @@ class SmartRefreshWrapper internal constructor() : RefreshWrapper {
 
     override fun onRefreshSuccess() {
         mRefreshScenes.forEach { it.onRefreshSuccess() }
-        showStatus(ViewStatus.CONTENT)
+        showStatusView(ViewStatus.CONTENT)
         mRefreshLayout.finishRefresh()
-    }
-
-    fun showStatus(status: String) {
-        mStatusViewController.showStatusView(status)
     }
 
     private fun canRefresh(manual: Boolean): Boolean {
