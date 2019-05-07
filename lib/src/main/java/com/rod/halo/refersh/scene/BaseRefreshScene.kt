@@ -20,7 +20,7 @@ abstract class BaseRefreshScene : RefreshScene {
     }
 
     protected fun refresh() {
-        mRefreshLayoutAdapter?.refresh(false)
+//        mRefreshLayoutAdapter?.refresh(false)
     }
 
 }
