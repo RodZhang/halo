@@ -11,7 +11,7 @@ import com.rod.halo.statusview.StatusView
  */
 interface RefreshWrapper {
 
-    fun wrapper(viewNeedRefresh: View)
+    fun wrapper(refreshLayoutAdapter: RefreshLayoutAdapter, viewNeedRefresh: View)
 
     fun getWrapperView(): View
 

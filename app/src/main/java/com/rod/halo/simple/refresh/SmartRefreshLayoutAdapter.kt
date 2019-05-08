@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import com.rod.halo.refersh.abs.IARefreshMode
 import com.rod.halo.refersh.abs.RefreshLayoutAdapter
 import com.rod.halo.refersh.abs.RefreshMode
@@ -20,10 +21,15 @@ class SmartRefreshLayoutAdapter : RefreshLayoutAdapter {
     private var mSmartRefreshLayout: SmartRefreshLayout? = null
 
     @SuppressLint("InflateParams")
-    override fun createView(context: Context) {
-        mSmartRefreshLayout = LayoutInflater.from(context)
-                .inflate(R.layout.common_smart_refresh_layout, null) as SmartRefreshLayout
+    override fun getRefreshLayout(context: Context): ViewGroup {
+        if (mSmartRefreshLayout == null) {
+            mSmartRefreshLayout = LayoutInflater.from(context)
+                    .inflate(R.layout.common_smart_refresh_layout, null) as SmartRefreshLayout
+        }
+        return mSmartRefreshLayout as ViewGroup
     }
+
+    override fun getRefreshLayout() = mSmartRefreshLayout
 
     override fun setContentView(view: View) {
         if (view.parent != null && view.parent != mSmartRefreshLayout) {
@@ -31,7 +37,7 @@ class SmartRefreshLayoutAdapter : RefreshLayoutAdapter {
         }
 
         if (view.parent == null) {
-            mSmartRefreshLayout?.addView(view)
+            mSmartRefreshLayout?.setRefreshContent(view)
         }
     }
 

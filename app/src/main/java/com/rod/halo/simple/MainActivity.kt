@@ -8,13 +8,14 @@ import android.widget.Toast
 import com.rod.halo.refersh.WrapperBuilder
 import com.rod.halo.refersh.abs.RefreshCallback
 import com.rod.halo.refersh.abs.RefreshWrapper
+import com.rod.halo.simple.refresh.SmartRefreshLayoutAdapter
 import com.rod.halo.simple.refresh.scene.NetworkChangeScene
 import com.rod.halo.simple.refresh.scene.TimerScene
 import com.rod.halo.simple.refresh.statusview.EmptyView
 import com.rod.halo.simple.refresh.statusview.LoadingView
 import com.rod.halo.simple.refresh.statusview.NetworkErrView
 import com.rod.halo.simple.refresh.statusview.ServerErrView
-import com.rod.halo.simple.refresh.wrapper.SmartRefreshWrapper
+import com.rod.halo.refersh.SmartRefreshWrapper
 import com.rod.halo.statusview.ViewStatus
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -34,7 +35,7 @@ class MainActivity : AppCompatActivity(), RefreshCallback {
             Toast.makeText(this, "click item $position, $id", Toast.LENGTH_SHORT).show()
         }
 
-        mRefreshWrapper = WrapperBuilder.newInstance(list_view)
+        mRefreshWrapper = WrapperBuilder.newInstance(list_view, SmartRefreshLayoutAdapter::class.java)
                 .putRefreshScene(TimerScene(this, 10000))
                 .putRefreshScene(NetworkChangeScene(this))
                 .putStatusView(NetworkErrView(this))

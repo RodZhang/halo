@@ -1,16 +1,16 @@
-package com.rod.halo.simple.refresh.wrapper
+package com.rod.halo.refersh
 
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import com.rod.halo.refersh.abs.RefreshCallback
+import com.rod.halo.refersh.abs.RefreshLayoutAdapter
 import com.rod.halo.refersh.abs.RefreshWrapper
 import com.rod.halo.refersh.scene.RefreshScene
 import com.rod.halo.statusview.ContentView
 import com.rod.halo.statusview.StatusView
 import com.rod.halo.statusview.StatusViewController
 import com.rod.halo.statusview.ViewStatus
-import com.scwang.smartrefresh.layout.SmartRefreshLayout
 
 /**
  *
@@ -28,31 +28,24 @@ class SmartRefreshWrapper internal constructor() : RefreshWrapper {
      * 每种类型的刷新场景应该最多只有一个
      */
     private val mRefreshScenes: ArrayList<RefreshScene> = ArrayList()
-    private lateinit var mRefreshLayout: SmartRefreshLayout
+    private lateinit var mRefreshLayoutAdapter: RefreshLayoutAdapter
     private var mRefreshCallback: RefreshCallback? = null
 
     private val mStatusViewController = StatusViewController()
 
-    override fun wrapper(viewNeedRefresh: View) {
-        val refreshLayout = initRefreshLayout(viewNeedRefresh)
+    override fun wrapper(refreshLayoutAdapter: RefreshLayoutAdapter, viewNeedRefresh: View) {
+        mRefreshLayoutAdapter = refreshLayoutAdapter
+        val refreshLayout = refreshLayoutAdapter.getRefreshLayout(viewNeedRefresh.context)
         replaceView(viewNeedRefresh, refreshLayout)
-        mRefreshLayout = refreshLayout
     }
 
-    private fun initRefreshLayout(viewNeedRefresh: View): SmartRefreshLayout {
-        val refreshLayout = SmartRefreshLayout(viewNeedRefresh.context)
-        refreshLayout.setDisableContentWhenLoading(true)
-        refreshLayout.setDisableContentWhenRefresh(true)
-//        refreshLayout.setOnRefreshListener { refresh(true) }
-        return refreshLayout
-    }
 
-    private fun replaceView(viewNeedRefresh: View, refreshLayout: SmartRefreshLayout) {
+    private fun replaceView(viewNeedRefresh: View, refreshLayout: ViewGroup) {
         val parent = viewNeedRefresh.parent as ViewGroup
         val indexOfRefreshView = parent.indexOfChild(viewNeedRefresh)
         parent.removeView(viewNeedRefresh)
 
-        refreshLayout.setRefreshContent(viewNeedRefresh)
+        mRefreshLayoutAdapter.setContentView(viewNeedRefresh)
         with(mStatusViewController) {
             setHost(parent, indexOfRefreshView)
             putStatusView(ContentView(refreshLayout))
@@ -60,8 +53,8 @@ class SmartRefreshWrapper internal constructor() : RefreshWrapper {
     }
 
     override fun getWrapperView(): View {
-        checkNotNull(mRefreshLayout) { "call wrapper at first" }
-        return mRefreshLayout
+        checkNotNull(mRefreshLayoutAdapter) { "call wrapper at first" }
+        return mRefreshLayoutAdapter.getRefreshLayout()!!
     }
 
     override fun setRefreshScene(refreshScenes: ArrayList<RefreshScene>) {
@@ -96,7 +89,7 @@ class SmartRefreshWrapper internal constructor() : RefreshWrapper {
     override fun onRefreshSuccess() {
         mRefreshScenes.forEach { it.onRefreshSuccess() }
         showStatusView(ViewStatus.CONTENT)
-        mRefreshLayout.finishRefresh()
+        mRefreshLayoutAdapter.finishRefresh(true, false)
     }
 
     private fun canRefresh(manual: Boolean): Boolean {

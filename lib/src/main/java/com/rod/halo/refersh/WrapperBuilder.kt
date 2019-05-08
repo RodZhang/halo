@@ -2,6 +2,7 @@ package com.rod.halo.refersh
 
 import android.view.View
 import com.rod.halo.refersh.abs.RefreshCallback
+import com.rod.halo.refersh.abs.RefreshLayoutAdapter
 import com.rod.halo.refersh.abs.RefreshWrapper
 import com.rod.halo.refersh.scene.RefreshScene
 import com.rod.halo.statusview.StatusView
@@ -11,10 +12,13 @@ import com.rod.halo.statusview.StatusView
  * @author Rod
  * @date 2018/12/15
  */
-class WrapperBuilder private constructor(private val mRefreshView: View) {
+class WrapperBuilder private constructor(
+        private val mRefreshView: View,
+        private val mRefreshLayoutAdapterClass: Class<out RefreshLayoutAdapter>
+) {
 
     companion object {
-        fun newInstance(refreshView: View) = WrapperBuilder(refreshView)
+        fun newInstance(refreshView: View, cls: Class<out RefreshLayoutAdapter>) = WrapperBuilder(refreshView, cls)
     }
 
     private val mRefreshSceneList = ArrayList<RefreshScene>()
@@ -36,15 +40,10 @@ class WrapperBuilder private constructor(private val mRefreshView: View) {
         return this
     }
 
-    fun <T: RefreshWrapper> build(cls: Class<T>): T {
-        val refreshWrapper = cls.newInstance()
-        with(refreshWrapper) {
-            wrapper(mRefreshView)
-            setRefreshScene(mRefreshSceneList)
-            setStatusView(mStatusViewList)
-            this.setRefreshCallback(mRefreshCallback)
-        }
-
-        return refreshWrapper
+    fun <T : RefreshWrapper> build(cls: Class<T>): T = cls.newInstance().apply {
+        wrapper(mRefreshLayoutAdapterClass.newInstance(), mRefreshView)
+        setRefreshScene(mRefreshSceneList)
+        setStatusView(mStatusViewList)
+        setRefreshCallback(mRefreshCallback)
     }
 }

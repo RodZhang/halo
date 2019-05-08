@@ -2,6 +2,7 @@ package com.rod.halo.refersh.abs
 
 import android.content.Context
 import android.view.View
+import android.view.ViewGroup
 
 /**
  *
@@ -10,7 +11,9 @@ import android.view.View
  */
 interface RefreshLayoutAdapter {
 
-    fun createView(context: Context)
+    fun getRefreshLayout(context: Context): ViewGroup
+
+    fun getRefreshLayout(): ViewGroup?
 
     fun setContentView(view: View)
 
