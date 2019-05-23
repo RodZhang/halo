@@ -8,12 +8,13 @@ ext {
     ]
 
     depVer = [
-            support          : '27.1.1',
-            junit            : '4.12',
-            androidTest      : '1.0.2',
-            espresso         : '3.0.2',
-            constraint_layout: '1.1.3',
-            smart_refresh    : '1.1.0-alpha-18'
+            support           : '27.1.1',
+            junit             : '4.12',
+            androidTest       : '1.0.2',
+            espresso          : '3.0.2',
+            constraint_layout : '1.1.3',
+            smart_refresh     : '1.1.0-alpha-18',
+            kotlinx_coroutines: '1.2.1'
     ]
 
     support = [
@@ -29,7 +30,9 @@ ext {
     ]
 
     third = [
-            kotlin       : "org.jetbrains.kotlin:kotlin-stdlib-jdk7: ${kotlin_version}",
-            smart_refresh: "com.scwang.smartrefresh:SmartRefreshLayout:${depVer.smart_refresh}"
+            kotlin            : "org.jetbrains.kotlin:kotlin-stdlib-jdk7: ${kotlin_version}",
+            smart_refresh     : "com.scwang.smartrefresh:SmartRefreshLayout:${depVer.smart_refresh}",
+            coroutines_core   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${depVer.kotlinx_coroutines}",
+            coroutines_android: "org.jetbrains.kotlinx:kotlinx-coroutines-android:${depVer.kotlinx_coroutines}"
     ]
 }

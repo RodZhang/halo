@@ -1,5 +1,6 @@
-package com.rod.halo.simple
+package com.rod.halo.simple.refresh
 
+import com.rod.halo.refersh.RefreshLogic
 import com.rod.halo.refersh.abs.RefreshWrapper
 import com.rod.halo.statusview.ViewStatus
 import com.rod.halo.utils.NetworkUtil
@@ -10,17 +11,20 @@ import com.rod.halo.utils.ToastUtil
  * @author Rod
  * @date 2019/5/6
  */
-class RefreshLogic(private val refreshWrapper: RefreshWrapper) {
+class SimpleRefreshLogic(
+        private val refreshWrapper: RefreshWrapper,
+        private val dataFinder: DataFinder
+) : RefreshLogic {
 
-    fun beforeLoadData(): Boolean {
+    override fun beforeLoadData(): Boolean {
         if (NetworkUtil.isNetworkEnable()) {
-            if (isEmpty()) {
+            if (dataFinder.isEmpty()) {
                 refreshWrapper.showStatusView(ViewStatus.LOADING)
             }
             return true
         }
 
-        if (isEmpty()) {
+        if (dataFinder.isEmpty()) {
             refreshWrapper.showStatusView(ViewStatus.NETWORK_ERR)
         } else {
             ToastUtil.show("网络异常...")
@@ -28,10 +32,10 @@ class RefreshLogic(private val refreshWrapper: RefreshWrapper) {
         return false
     }
 
-    fun afterLoadData(isSuccess: Boolean, isRspDataEmpty: Boolean) {
+    override fun afterLoadData(isSuccess: Boolean, isRspDataEmpty: Boolean) {
         if (isSuccess) {
             if (isRspDataEmpty) {
-                if (isEmpty()) {
+                if (dataFinder.isEmpty()) {
                     refreshWrapper.showStatusView(ViewStatus.EMPTY)
                 }
             } else {
@@ -39,11 +43,11 @@ class RefreshLogic(private val refreshWrapper: RefreshWrapper) {
             }
         } else {
             if (NetworkUtil.isNetworkEnable()) {
-                if (isEmpty()) {
+                if (dataFinder.isEmpty()) {
                     refreshWrapper.showStatusView(ViewStatus.SERVER_ERR)
                 }
             } else {
-                if (isEmpty()) {
+                if (dataFinder.isEmpty()) {
                     refreshWrapper.showStatusView(ViewStatus.NETWORK_ERR)
                 } else {
                     ToastUtil.show("网络异常...")
@@ -52,5 +56,7 @@ class RefreshLogic(private val refreshWrapper: RefreshWrapper) {
         }
     }
 
-    private fun isEmpty() = true
+    interface DataFinder {
+        fun isEmpty(): Boolean
+    }
 }

@@ -2,27 +2,29 @@ package com.rod.halo.simple
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import com.rod.halo.refersh.RefreshLogic
+import com.rod.halo.refersh.SimpleRefreshWrapper
 import com.rod.halo.refersh.WrapperBuilder
-import com.rod.halo.refersh.abs.RefreshCallback
 import com.rod.halo.refersh.abs.RefreshWrapper
+import com.rod.halo.simple.refresh.SimpleRefreshLogic
 import com.rod.halo.simple.refresh.SmartRefreshLayoutAdapter
-import com.rod.halo.simple.refresh.scene.NetworkChangeScene
-import com.rod.halo.simple.refresh.scene.TimerScene
 import com.rod.halo.simple.refresh.statusview.EmptyView
 import com.rod.halo.simple.refresh.statusview.LoadingView
 import com.rod.halo.simple.refresh.statusview.NetworkErrView
 import com.rod.halo.simple.refresh.statusview.ServerErrView
-import com.rod.halo.refersh.SmartRefreshWrapper
-import com.rod.halo.statusview.ViewStatus
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-class MainActivity : AppCompatActivity(), RefreshCallback {
+class MainActivity : AppCompatActivity(), SimpleRefreshLogic.DataFinder {
 
     private lateinit var mAdapter: ArrayAdapter<String>
     private lateinit var mRefreshWrapper: RefreshWrapper
+    private lateinit var mRefreshLogic: RefreshLogic
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,26 +38,36 @@ class MainActivity : AppCompatActivity(), RefreshCallback {
         }
 
         mRefreshWrapper = WrapperBuilder.newInstance(list_view, SmartRefreshLayoutAdapter::class.java)
-                .putRefreshScene(TimerScene(this, 10000))
-                .putRefreshScene(NetworkChangeScene(this))
                 .putStatusView(NetworkErrView(this))
                 .putStatusView(ServerErrView(this))
                 .putStatusView(EmptyView(this))
                 .putStatusView(LoadingView(this))
-                .setRefreshCallback(this)
-                .build(SmartRefreshWrapper::class.java)
-//        container.setOnClickListener { mRefreshWrapper.refresh(true) }
-        startRefresh()
+                .build(SimpleRefreshWrapper::class.java)
+        mRefreshLogic = SimpleRefreshLogic(mRefreshWrapper, this)
+        loadData()
     }
 
-    override fun startRefresh() {
-        if (mAdapter.isEmpty) {
-            mRefreshWrapper.showStatusView(ViewStatus.LOADING)
+    private fun loadData() {
+        if (!mRefreshLogic.beforeLoadData()) {
+            return
         }
-        container.postDelayed({
-            mAdapter.addAll((0 until 100).mapIndexed { index, _ -> "item $index" })
-            mRefreshWrapper.onRefreshSuccess()
-            Log.d("MainActivity", "refresh success")
-        }, 3000)
+
+        GlobalScope.launch {
+            val data = (0 until 100).mapIndexed { index, _ -> "item $index" }
+            delay(3000)
+
+            launch(Dispatchers.Main) {
+                endRefresh(true, data)
+            }
+        }
     }
+
+    private fun endRefresh(success: Boolean, data: List<String>) {
+        if (data.isNotEmpty()) {
+            mAdapter.addAll(data)
+        }
+        mRefreshLogic.afterLoadData(success, data.isEmpty())
+    }
+
+    override fun isEmpty() = mAdapter.isEmpty
 }

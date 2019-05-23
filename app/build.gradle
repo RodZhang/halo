@@ -31,6 +31,8 @@ dependencies {
 
     implementation support.constraint_layout
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation third.coroutines_core
+    implementation third.coroutines_android
 
     api project(':lib')
     api third.smart_refresh

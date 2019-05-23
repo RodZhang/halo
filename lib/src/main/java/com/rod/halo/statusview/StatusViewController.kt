@@ -17,12 +17,14 @@ class StatusViewController {
         mStatusViews[statusView.getId()] = statusView
     }
 
+    /**
+     * @see ViewStatus
+     */
     fun showStatusView(id: String) {
-        val host = mHost
-                ?: throw IllegalStateException("mContainerInfo is null, call setHost first")
+        val host = mHost ?: throw IllegalStateException("mContainerInfo is null, call setHost first")
 
         val nextStatusView = mStatusViews[id]
-        if (mCurStatusView == nextStatusView) {
+        if (mCurStatusView == nextStatusView || nextStatusView == null) {
             return
         }
 
