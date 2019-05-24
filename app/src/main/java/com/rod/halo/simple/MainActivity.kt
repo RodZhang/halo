@@ -2,6 +2,8 @@ package com.rod.halo.simple
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.rod.halo.refersh.RefreshLogic
@@ -14,6 +16,7 @@ import com.rod.halo.simple.refresh.statusview.EmptyView
 import com.rod.halo.simple.refresh.statusview.LoadingView
 import com.rod.halo.simple.refresh.statusview.NetworkErrView
 import com.rod.halo.simple.refresh.statusview.ServerErrView
+import com.rod.halo.statusview.ViewStatus
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -70,4 +73,33 @@ class MainActivity : AppCompatActivity(), SimpleRefreshLogic.DataFinder {
     }
 
     override fun isEmpty() = mAdapter.isEmpty
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main_activity, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.show_content -> {
+            mRefreshWrapper.showStatusView(ViewStatus.CONTENT)
+            true
+        }
+        R.id.show_empty -> {
+            mRefreshWrapper.showStatusView(ViewStatus.EMPTY)
+            true
+        }
+        R.id.show_loading -> {
+            mRefreshWrapper.showStatusView(ViewStatus.LOADING)
+            true
+        }
+        R.id.show_net_err -> {
+            mRefreshWrapper.showStatusView(ViewStatus.NETWORK_ERR)
+            true
+        }
+        R.id.show_service_err -> {
+            mRefreshWrapper.showStatusView(ViewStatus.SERVER_ERR)
+            true
+        }
+        else -> super.onOptionsItemSelected(item)
+    }
 }

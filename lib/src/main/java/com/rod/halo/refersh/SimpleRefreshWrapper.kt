@@ -38,7 +38,7 @@ class SimpleRefreshWrapper internal constructor() : RefreshWrapper {
         mRefreshLayoutAdapter.setContentView(contentView)
         with(mStatusViewController) {
             setHost(parent, index)
-            putStatusView(ContentView(refreshLayout))
+            putContentView(ContentView(refreshLayout))
         }
     }
 
