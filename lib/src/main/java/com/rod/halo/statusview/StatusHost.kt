@@ -1,5 +1,6 @@
 package com.rod.halo.statusview
 
+import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
 import com.rod.halo.utils.UIUtil
@@ -11,21 +12,47 @@ import com.rod.halo.utils.UIUtil
  */
 class StatusHost(private val mParent: ViewGroup, val mPos: Int) {
 
+    private val mTypeView = SparseArray<View>()
+
     fun switchStatusView(oldStatusView: StatusView?, newStatusView: StatusView?) {
         oldStatusView?.run {
-            getView().visibility = View.GONE
-            onDetach(mParent)
+            getView()?.visibility = View.GONE
+            onVisibleChange(false)
         }
 
+        initStatusViewIfNeed(newStatusView)
         newStatusView?.run {
-            with(getView()) {
+            val view = getView()
+                    ?: throw IllegalStateException("$this is inited bug getView return null")
+            with(view) {
                 if (parent != mParent) {
                     UIUtil.removeFromParent(this)
                     mParent.addView(this, mPos)
                 }
                 visibility = View.VISIBLE
             }
-            onAttach(mParent)
+            onVisibleChange(true)
+        }
+    }
+
+    private fun initStatusViewIfNeed(statusView: StatusView?) {
+        statusView?.run {
+            if (isInited()) {
+                return
+            }
+            if (getViewType() == StatusView.VIEW_TYPE_UN_REUSEABLE) {
+                initView()
+                return
+            }
+            val cacheView = mTypeView[getViewType()]
+            if (cacheView == null) {
+                initView()
+                val view = getView()
+                        ?: throw IllegalStateException("$this is inited bug getView return null")
+                mTypeView.append(getViewType(), view)
+            } else {
+                setView(cacheView)
+            }
         }
     }
 }
