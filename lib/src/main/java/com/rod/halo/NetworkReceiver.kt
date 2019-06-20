@@ -7,7 +7,7 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.wifi.WifiManager
 import com.rod.halo.utils.NetworkUtil
-import com.rod.halo.utils.RL
+import com.rod.halo.utils.HL
 
 
 /**
@@ -26,7 +26,7 @@ class NetworkReceiver : BroadcastReceiver() {
         }
         if (WifiManager.WIFI_STATE_CHANGED_ACTION == intent.action) {// 监听wifi的打开与关闭，与wifi的连接无关
             val wifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, 0)
-            RL.e(TAG, "wifiState:$wifiState")
+            HL.e(TAG, "wifiState:$wifiState")
             when (wifiState) {
                 WifiManager.WIFI_STATE_DISABLED -> {
                 }

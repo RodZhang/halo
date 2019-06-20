@@ -7,7 +7,7 @@ import android.util.Log
  * @author Rod
  * @date 2018/12/30
  */
-object RL {
+object HL {
     const val LEVEL_DISABLE = 0
     const val LEVEL_VERBOSE = 1
     const val LEVEL_DEBUG = 2
@@ -50,7 +50,7 @@ object RL {
     private fun log(tag: String, msg: String, throwable: Throwable?,
                     level: Int, log: (t: String, m: String) -> Int,
                     logWithThrowable: (t: String, m: String, tr: Throwable?) -> Int) {
-        if (this.level < level) {
+        if (this.level > level) {
             return
         }
         if (throwable == null) log(tag, msg) else logWithThrowable(tag, msg, throwable)

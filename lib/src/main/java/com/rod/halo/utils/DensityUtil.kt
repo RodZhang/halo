@@ -30,14 +30,15 @@ object DensityUtil {
 
                 override fun onConfigurationChanged(newConfig: Configuration?) {
                     newConfig?.run {
-                        RL.d(TAG, "onConfigurationChanged->fontScale=$fontScale")
+                        HL.d(TAG, "onConfigurationChanged->fontScale=$fontScale")
                         mNoncompatDensityScaleDensity = appDisplayMetrics.scaledDensity
                     }
                 }
             })
         }
 
-        val targetDensity = appDisplayMetrics.widthPixels / DESIGN_SCREEN_WIDTH
+        val minSidePixels = Math.min(appDisplayMetrics.widthPixels, appDisplayMetrics.heightPixels)
+        val targetDensity = minSidePixels / DESIGN_SCREEN_WIDTH
         val targetScaleDensity = targetDensity * (mNoncompatDensityScaleDensity / mNoncompatDensity)
         val targetDensityDpi: Int = (160 * targetDensity).toInt()
         appDisplayMetrics.density = targetDensity

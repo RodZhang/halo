@@ -44,11 +44,11 @@ object NetworkUtil {
         if (NetworkInfo.State.CONNECTED == info.state && info.isAvailable) {
             if (info.type == ConnectivityManager.TYPE_WIFI || info.type == ConnectivityManager.TYPE_MOBILE) {
                 mIsNetworkEnable.value = true
-                RL.d(TAG, "onNetworkStateChanged, network enable")
+                HL.d(TAG, "onNetworkStateChanged, network enable")
             }
         } else {
             mIsNetworkEnable.value = false
-            RL.d(TAG, "onNetworkStateChanged, network disable")
+            HL.d(TAG, "onNetworkStateChanged, network disable")
         }
     }
 
@@ -72,7 +72,7 @@ object NetworkUtil {
                         override fun onAvailable(network: Network?) {
                             super.onAvailable(network)
                             BaseApp.gMainHandler.post { mIsNetworkEnable.value = true }
-                            RL.d(TAG, "NetworkCallback, onAvailable")
+                            HL.d(TAG, "NetworkCallback, onAvailable")
                         }
 
                         /**
@@ -80,21 +80,21 @@ object NetworkUtil {
                          */
                         override fun onLost(network: Network?) {
                             BaseApp.gMainHandler.post { mIsNetworkEnable.value = false }
-                            RL.d(TAG, "NetworkCallback, onLost")
+                            HL.d(TAG, "NetworkCallback, onLost")
                         }
 
                         /**
                          * 按照官方的字面意思是，当我们的网络的某个能力发生了变化回调，那么也就是说可能会回调多次
                          */
                         override fun onCapabilitiesChanged(network: Network?, networkCapabilities: NetworkCapabilities?) {
-                            RL.d(TAG, "NetworkCallback, onCapabilitiesChanged")
+                            HL.d(TAG, "NetworkCallback, onCapabilitiesChanged")
                         }
 
                         /**
                          * 当建立网络连接时，回调连接的属性
                          */
                         override fun onLinkPropertiesChanged(network: Network?, linkProperties: LinkProperties?) {
-                            RL.d(TAG, "NetworkCallback, onLinkPropertiesChanged")
+                            HL.d(TAG, "NetworkCallback, onLinkPropertiesChanged")
                         }
 
                         /**
@@ -102,7 +102,7 @@ object NetworkUtil {
                          */
                         override fun onUnavailable() {
                             super.onUnavailable()
-                            RL.d(TAG, "NetworkCallback, onUnavailable")
+                            HL.d(TAG, "NetworkCallback, onUnavailable")
                         }
 
                         /**
@@ -110,11 +110,11 @@ object NetworkUtil {
                          */
                         override fun onLosing(network: Network?, maxMsToLive: Int) {
                             super.onLosing(network, maxMsToLive)
-                            RL.d(TAG, "NetworkCallback, onLosing")
+                            HL.d(TAG, "NetworkCallback, onLosing")
                         }
                     })
         } else {
-            RL.d(TAG, "get connectivityManager fail")
+            HL.d(TAG, "get connectivityManager fail")
             listenNetworkStateWithBroadcastReceiver(context)
         }
     }
