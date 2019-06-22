@@ -18,6 +18,7 @@ ext {
     ]
 
     support = [
+            design           : "com.android.support:design:${depVer.support}",
             appcompat        : "com.android.support:appcompat-v7:${depVer.support}",
             constraint_layout: "com.android.support.constraint:constraint-layout:${depVer.constraint_layout}"
     ]
