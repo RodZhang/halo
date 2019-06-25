@@ -34,6 +34,9 @@ dependencies {
     implementation third.coroutines_core
     implementation third.coroutines_android
 
+    api project(":halo-annotation")
+    annotationProcessor project(':halo-compiler')
+    api project(":halo-api")
     api project(':lib')
     api third.smart_refresh
 }
