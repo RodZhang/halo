@@ -7,22 +7,23 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.annotation.processing.AbstractProcessor;
-import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
+import javax.lang.model.element.Element;
+import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 
 @AutoService(Processor.class)
 public class AnnotationProcessor extends AbstractProcessor {
 
-    private Filer mFiler;
+    private ProcessingEnvironment mProcessingEnvironment;
 
     @Override
     public synchronized void init(ProcessingEnvironment processingEnvironment) {
         super.init(processingEnvironment);
-        mFiler = processingEnvironment.getFiler();
+        mProcessingEnvironment = processingEnvironment;
     }
 
     @Override
@@ -39,6 +40,15 @@ public class AnnotationProcessor extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> set, RoundEnvironment roundEnvironment) {
+        // 获取由 OnClick 注解的所有元素
+        Set<? extends Element> elements = roundEnvironment.getElementsAnnotatedWith(OnClick.class);
+        for (Element element : elements) {
+            OnClick onClick = element.getAnnotation(OnClick.class);
+            if (element instanceof ExecutableElement) {
+                ExecutableElement executableElement = (ExecutableElement) element;
+            }
+        }
+
         return false;
     }
 }
