@@ -1,6 +1,7 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
 apply from: rootProject.file('dependences.gradle')
 
 android {
@@ -35,8 +36,8 @@ dependencies {
     implementation third.coroutines_android
 
     api project(":halo-annotation")
-    annotationProcessor project(':halo-compiler')
+    kapt project(":halo-compiler")
     api project(":halo-api")
-    api project(':lib')
+    api project(":lib")
     api third.smart_refresh
 }

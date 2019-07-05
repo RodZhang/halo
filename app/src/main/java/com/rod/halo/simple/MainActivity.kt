@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import com.rod.annotation.OnClick
+import com.rod.api.Halo
 import com.rod.halo.refersh.RefreshLogic
 import com.rod.halo.refersh.SimpleRefreshWrapper
 import com.rod.halo.refersh.WrapperBuilder
@@ -17,6 +20,7 @@ import com.rod.halo.simple.refresh.statusview.LoadingView
 import com.rod.halo.simple.refresh.statusview.NetworkErrView
 import com.rod.halo.simple.refresh.statusview.ServerErrView
 import com.rod.halo.statusview.ViewStatus
+import com.rod.halo.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -48,6 +52,7 @@ class MainActivity : AppCompatActivity(), SimpleRefreshLogic.DataFinder {
                 .build(SimpleRefreshWrapper::class.java)
         mRefreshLogic = SimpleRefreshLogic(mRefreshWrapper, this)
         loadData()
+        Halo.inject(this)
     }
 
     private fun loadData() {
@@ -73,6 +78,11 @@ class MainActivity : AppCompatActivity(), SimpleRefreshLogic.DataFinder {
     }
 
     override fun isEmpty() = mAdapter.isEmpty
+
+    @OnClick(R.id.btn_one)
+    fun onBtnClick(view: View) {
+        ToastUtil.show("click button one")
+    }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main_activity, menu)

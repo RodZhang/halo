@@ -1,9 +1,9 @@
 package com.rod.api;
 
 import android.app.Activity;
+import android.util.Log;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+import java.lang.reflect.Constructor;
 
 /**
  * @author Rod
@@ -14,19 +14,15 @@ public class Halo {
     private Halo() {
     }
 
-    public static void inject(Activity activity) {
+    public static <A extends Activity> void inject(A activity) {
+        Log.d("Halo", "inject");
         try {
-            Class<?> injector = Class.forName(activity.getClass().getName() + "$ViewInjector");
-            Method inject = injector.getDeclaredMethod("inject", activity.getClass());
-            inject.invoke(null, activity);
-        } catch (ClassNotFoundException e) {
+            Class<?> injector = Class.forName(activity.getClass().getName() + "_ViewBinding");
+            Constructor inject = injector.getConstructor(activity.getClass());
+            inject.newInstance(activity);
+        } catch (Exception e) {
             e.printStackTrace();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (InvocationTargetException e) {
-            e.printStackTrace();
+            Log.d("Halo", "", e);
         }
     }
 }

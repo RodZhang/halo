@@ -1,15 +1,13 @@
 apply plugin: 'java-library'
+apply from: file('../dependences.gradle')
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    // AutoService会自动在META-INF文件夹下生成Processor配置信息文件，该文件里就是实现该服务接口的具体实现类。
-    // 而当外部程序装配这个模块的时候，就能通过该jar包META-INF/services/里的配置文件找到具体的实现类名，并装载实例化，完成模块的注入。
-    // 基于这样一个约定就能很好的找到服务接口的实现类，而不需要再代码里制定，方便快捷。
-    compile 'com.google.auto.service:auto-service:1.0-rc2'
-    compile 'com.squareup:javapoet:1.8.0'
+    implementation third.auto_service
+    implementation third.javapoet
     api project(":halo-annotation")
 }
-
-sourceCompatibility = "7"
-targetCompatibility = "7"
