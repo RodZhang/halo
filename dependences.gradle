@@ -16,7 +16,9 @@ ext {
             smart_refresh     : '1.1.0-alpha-18',
             kotlinx_coroutines: '1.2.1',
             auto_service      : "1.0-rc4",
-            javapoet          : "1.10.0"
+            auto_common       : "0.10",
+            javapoet          : "1.10.0",
+            androidx          : "1.1.0",
     ]
 
     support = [
@@ -24,6 +26,12 @@ ext {
             appcompat        : "com.android.support:appcompat-v7:${depVer.support}",
             constraint_layout: "com.android.support.constraint:constraint-layout:${depVer.constraint_layout}"
     ]
+
+    androidx = [
+            annotations: "androidx.annotation:annotation:${depVer.androidx}",
+    ]
+
+    compileAndroid = "com.google.android:android:4.1.1.4"
 
     test = [
             junit   : "junit:junit:${depVer.junit}",
@@ -41,6 +49,7 @@ ext {
             // 而当外部程序装配这个模块的时候，就能通过该jar包META-INF/services/里的配置文件找到具体的实现类名，并装载实例化，完成模块的注入。
             // 基于这样一个约定就能很好的找到服务接口的实现类，而不需要再代码里制定，方便快捷。
             auto_service      : "com.google.auto.service:auto-service:${depVer.auto_service}",
+            auto_common       : "com.google.auto:auto-common:${depVer.auto_common}",
             javapoet          : "com.squareup:javapoet:${depVer.javapoet}"
     ]
 }

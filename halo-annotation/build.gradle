@@ -1,7 +1,11 @@
 apply plugin: 'java-library'
+apply from: file('../dependences.gradle')
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    compileOnly compileAndroid
+    implementation androidx.annotations
 }
 
 sourceCompatibility = "7"

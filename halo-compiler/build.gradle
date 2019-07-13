@@ -7,7 +7,9 @@ targetCompatibility = JavaVersion.VERSION_1_8
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation third.auto_service
+    compileOnly third.auto_service
+    compileOnly compileAndroid
+    implementation third.auto_common
     implementation third.javapoet
     api project(":halo-annotation")
 }
