@@ -12,7 +12,7 @@ import com.rod.halo.utils.NetworkUtil
  * @author Rod
  * @date 2018/12/15
  */
-class BaseApp : Application() {
+open class BaseApp : Application() {
 
     companion object {
         @SuppressLint("StaticFieldLeak")
@@ -20,9 +20,13 @@ class BaseApp : Application() {
         val gMainHandler = Handler(Looper.getMainLooper())
     }
 
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        gContext = this
+    }
+
     override fun onCreate() {
         super.onCreate()
-        gContext = this
 
         NetworkUtil.listenNetworkState(this)
     }
