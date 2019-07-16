@@ -62,7 +62,7 @@ public class OnClickParser implements Parser {
                                         .addModifiers(Modifier.PUBLIC)
                                         .addParameter(View.class, "view", Modifier.FINAL)
                                         .addAnnotation(Override.class)
-                                        .addStatement("activity.$L(view)", elem.getSimpleName())
+                                        .addStatement("target.$L(view)", elem.getSimpleName())
                                         .returns(TypeName.VOID)
                                         .build()
                         )

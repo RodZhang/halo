@@ -20,7 +20,6 @@ import com.rod.halo.simple.refresh.statusview.LoadingView
 import com.rod.halo.simple.refresh.statusview.NetworkErrView
 import com.rod.halo.simple.refresh.statusview.ServerErrView
 import com.rod.halo.statusview.ViewStatus
-import com.rod.halo.utils.ToastUtil
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -81,7 +80,10 @@ class MainActivity : AppCompatActivity(), SimpleRefreshLogic.DataFinder {
 
     @OnClick(R.id.btn_one)
     fun onBtnClick(view: View) {
-        ToastUtil.show("click button one")
+        supportFragmentManager.beginTransaction()
+                .add(R.id.container, MainFragment(), MainFragment.TAG)
+                .addToBackStack(null)
+                .commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

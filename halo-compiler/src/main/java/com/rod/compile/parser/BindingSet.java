@@ -1,6 +1,8 @@
 package com.rod.compile.parser;
 
 import com.google.auto.common.MoreElements;
+import com.rod.compile.HaloProcessConstants;
+import com.rod.compile.ProcessHelper;
 import com.squareup.javapoet.ClassName;
 import com.squareup.javapoet.JavaFile;
 import com.squareup.javapoet.MethodSpec;
@@ -28,14 +30,19 @@ public class BindingSet {
     private final TypeName mTargetTypeName;
     private final ClassName mBindingClassName;
     private final Map<Integer, List<ListenerElem>> mListenerMethods;
+    private final boolean mIsActivity;
 
     private BindingSet(Builder builder) {
         mTargetTypeName = builder.mTargetType;
         mBindingClassName = builder.mBindingClassName;
         mListenerMethods = builder.mListenerMethods;
+        mIsActivity = builder.mIsActivity;
     }
 
-    public static Builder getOrNewBuilder(Map<TypeElement, Builder> builderMap, TypeElement typeElement) {
+    public static Builder getOrNewBuilder(
+            Map<TypeElement, Builder> builderMap,
+            TypeElement typeElement
+    ) {
         Builder result;
         if (!builderMap.containsKey(typeElement) || builderMap.get(typeElement) == null) {
             result = BindingSet.newBuilder(typeElement);
@@ -58,14 +65,21 @@ public class BindingSet {
                 packageName.length() + 1
         ).replace(".", "$");
         ClassName bindingClassName = ClassName.get(packageName, className + "_ViewBinding");
-        return new Builder(targetType, bindingClassName);
+        boolean isActivity = ProcessHelper.isSubtypeOfType(
+                typeMirror, HaloProcessConstants.ACTIVITY_TYPE
+        );
+        return new Builder(targetType, bindingClassName, isActivity);
     }
 
     public JavaFile getJavaFile() {
         TypeSpec.Builder classBuilder = TypeSpec.classBuilder(mBindingClassName);
         classBuilder.addModifiers(Modifier.FINAL, Modifier.PUBLIC);
 
-        classBuilder.addMethod(createConstructorForActivity());
+        if (mIsActivity) {
+            classBuilder.addMethod(createConstructorForActivity());
+        }
+
+        classBuilder.addMethod(createConstructor());
 
         return JavaFile.builder(mBindingClassName.packageName(), classBuilder.build())
                 .addFileComment("Generated code from compiler. Do not modify!")
@@ -76,9 +90,18 @@ public class BindingSet {
         MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder()
                 .addModifiers(Modifier.PUBLIC)
                 .addParameter(mTargetTypeName, "activity", Modifier.FINAL);
+        constructorBuilder.addStatement("this(activity, activity.getWindow().getDecorView())");
+        return constructorBuilder.build();
+    }
 
-        constructorBuilder.addStatement("$T rootView = activity.getWindow().getDecorView()", VIEW);
-        constructorBuilder.addStatement("$T view", VIEW);
+    private MethodSpec createConstructor() {
+
+        MethodSpec.Builder constructorBuilder = MethodSpec.constructorBuilder()
+                .addModifiers(Modifier.PUBLIC)
+                .addParameter(mTargetTypeName, "target", Modifier.FINAL)
+                .addParameter(HaloProcessConstants.VIEW_CLASSNAME, "rootView", Modifier.FINAL)
+                .addStatement("$T view", VIEW);
+
         addListenerBindings(constructorBuilder);
 
         return constructorBuilder.build();
@@ -105,10 +128,12 @@ public class BindingSet {
         private final Map<Integer, List<ListenerElem>> mListenerMethods = new HashMap();
         private final TypeName mTargetType;
         private final ClassName mBindingClassName;
+        private final boolean mIsActivity;
 
-        public Builder(TypeName targetType, ClassName bindingClassName) {
+        public Builder(TypeName targetType, ClassName bindingClassName, boolean isActivity) {
             mTargetType = targetType;
             mBindingClassName = bindingClassName;
+            mIsActivity = isActivity;
         }
 
         Builder putListenerMethod(int id, ListenerElem listenerElem) {
