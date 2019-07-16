@@ -11,5 +11,5 @@ dependencies {
     compileOnly compileAndroid
     implementation third.auto_common
     implementation third.javapoet
-    api project(":halo-annotation")
+    api project(":halo:halo-annotation")
 }
