@@ -16,10 +16,8 @@ import org.jetbrains.anko.wrapContent
  */
 class NetworkErrView(private val context: Context) : BaseStatusView() {
 
-    private var mView: View? = null
-
-    override fun initViewInner() {
-        mView = with(context) {
+    override fun inflateView(): View {
+        return with(context) {
             frameLayout {
                 textView("网络不可用，请检查网络连接后再试...")
                         .lparams(wrapContent, wrapContent, android.view.Gravity.CENTER)
@@ -27,13 +25,10 @@ class NetworkErrView(private val context: Context) : BaseStatusView() {
         }
     }
 
-    override fun setViewInner(view: View) {
-        mView = view
+    override fun initViewInner(view: View) {
     }
 
     override fun getId() = ViewStatus.NETWORK_ERR
-
-    override fun getView() = mView
 
     override fun getViewType() = StatusView.VIEW_TYPE_UN_REUSEABLE
 }

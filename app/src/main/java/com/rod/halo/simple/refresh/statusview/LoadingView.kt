@@ -24,7 +24,17 @@ class LoadingView(private val context: Context) : BaseStatusView() {
         mTextView.text = "Loading ${getDot(dotCount)}"
         postChangeText()
     }
-    private var mView: View? = null
+
+    override fun inflateView(): View {
+        return with(context) {
+            frameLayout {
+                mTextView = textView().lparams(wrapContent, wrapContent, android.view.Gravity.CENTER)
+            }
+        }
+    }
+
+    override fun initViewInner(view: View) {
+    }
 
     override fun onVisibleChange(visibleToUser: Boolean) {
         if (visibleToUser) {
@@ -36,8 +46,6 @@ class LoadingView(private val context: Context) : BaseStatusView() {
 
     override fun getId() = ViewStatus.LOADING
 
-    override fun getView() = mView
-
     private fun getDot(count: Int): String {
         var result = ""
         (0 until count).forEach { _ -> result += "." }
@@ -46,18 +54,6 @@ class LoadingView(private val context: Context) : BaseStatusView() {
 
     private fun postChangeText() {
         mTextView.postDelayed(mLoadingRunnable, 333)
-    }
-
-    override fun initViewInner() {
-        mView = with(context) {
-            frameLayout {
-                mTextView = textView().lparams(wrapContent, wrapContent, android.view.Gravity.CENTER)
-            }
-        }
-    }
-
-    override fun setViewInner(view: View) {
-        mView = view
     }
 
     override fun getViewType() = StatusView.VIEW_TYPE_UN_REUSEABLE

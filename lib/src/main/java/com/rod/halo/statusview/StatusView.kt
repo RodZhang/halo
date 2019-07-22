@@ -52,12 +52,15 @@ interface StatusView {
 
 abstract class BaseStatusView : StatusView {
     private var mIsInited: Boolean = false
+    protected var mView: View? = null
 
     override fun initView() {
         if (mIsInited) {
             throw IllegalStateException("has been inited")
         }
-        initViewInner()
+        val view = inflateView()
+        mView = view
+        initViewInner(view)
         mIsInited = true
     }
 
@@ -66,7 +69,8 @@ abstract class BaseStatusView : StatusView {
             throw IllegalStateException("has been inited")
         }
 
-        setViewInner(view)
+        mView = view
+        initViewInner(view)
         mIsInited = true
     }
 
@@ -74,7 +78,11 @@ abstract class BaseStatusView : StatusView {
         return mIsInited
     }
 
-    abstract fun initViewInner()
+    override fun getView(): View? {
+        return mView
+    }
 
-    abstract fun setViewInner(view: View)
+    abstract fun inflateView(): View
+
+    abstract fun initViewInner(view: View)
 }

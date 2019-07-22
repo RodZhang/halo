@@ -16,23 +16,18 @@ import org.jetbrains.anko.wrapContent
  */
 class ServerErrView(private val context: Context) : BaseStatusView() {
 
-    private var mView: View? = null
-
-    override fun initViewInner() {
-        mView = with(context) {
+    override fun inflateView(): View {
+        return with(context) {
             frameLayout {
                 textView("请求服务器失败").lparams(wrapContent, wrapContent, android.view.Gravity.CENTER)
             }
         }
     }
 
-    override fun setViewInner(view: View) {
-        mView = view
+    override fun initViewInner(view: View) {
     }
 
     override fun getId() = ViewStatus.SERVER_ERR
-
-    override fun getView() = mView
 
     override fun getViewType() = StatusView.VIEW_TYPE_UN_REUSEABLE
 }
