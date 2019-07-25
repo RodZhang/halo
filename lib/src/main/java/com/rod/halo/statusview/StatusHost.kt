@@ -1,5 +1,6 @@
 package com.rod.halo.statusview
 
+import android.os.Bundle
 import android.util.SparseArray
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +15,7 @@ class StatusHost(private val mParent: ViewGroup, val mPos: Int) {
 
     private val mTypeView = SparseArray<View>()
 
-    fun switchStatusView(oldStatusView: StatusView?, newStatusView: StatusView?) {
+    fun switchStatusView(oldStatusView: StatusView?, newStatusView: StatusView?, data: Bundle?) {
         oldStatusView?.run {
             getView()?.visibility = View.GONE
             onVisibleChange(false)
@@ -31,7 +32,7 @@ class StatusHost(private val mParent: ViewGroup, val mPos: Int) {
                 }
                 visibility = View.VISIBLE
             }
-            onVisibleChange(true)
+            onVisibleChange(true, data)
         }
     }
 

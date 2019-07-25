@@ -1,5 +1,6 @@
 package com.rod.halo.statusview
 
+import android.os.Bundle
 import android.view.ViewGroup
 
 /**
@@ -25,7 +26,7 @@ class StatusViewController {
     /**
      * @see ViewStatus
      */
-    fun showStatusView(id: String) {
+    fun showStatusView(id: String, data: Bundle? = null) {
         val host = mHost ?: throw IllegalStateException("mContainerInfo is null, call setHost first")
         val nextStatusView = mStatusViews[id] ?: throw IllegalStateException("do not have state view of id: $id")
 
@@ -33,7 +34,7 @@ class StatusViewController {
             return
         }
 
-        host.switchStatusView(mCurStatusView, nextStatusView)
+        host.switchStatusView(mCurStatusView, nextStatusView, data)
         mCurStatusView = nextStatusView
     }
 

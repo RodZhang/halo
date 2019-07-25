@@ -1,5 +1,6 @@
 package com.rod.halo.statusview
 
+import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 
@@ -36,7 +37,7 @@ interface StatusView {
 
     fun isInited(): Boolean
 
-    fun onVisibleChange(visibleToUser: Boolean) {}
+    fun onVisibleChange(visibleToUser: Boolean, data: Bundle? = null)
 
     /**
      * 定义 view 的类型，用户复用逻辑，可以以 layout id，或者自己定义的不重复的 type 值
@@ -81,6 +82,9 @@ abstract class BaseStatusView : StatusView {
 
     override fun getView(): View? {
         return mView
+    }
+
+    override fun onVisibleChange(visibleToUser: Boolean, data: Bundle?) {
     }
 
     abstract fun onCreateView(parent: ViewGroup): View

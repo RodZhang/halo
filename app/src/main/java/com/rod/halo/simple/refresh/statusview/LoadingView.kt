@@ -1,6 +1,7 @@
 package com.rod.halo.simple.refresh.statusview
 
 import android.content.Context
+import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
@@ -37,7 +38,7 @@ class LoadingView(private val context: Context) : BaseStatusView() {
     override fun onViewCreated(view: View) {
     }
 
-    override fun onVisibleChange(visibleToUser: Boolean) {
+    override fun onVisibleChange(visibleToUser: Boolean, data: Bundle) {
         if (visibleToUser) {
             postChangeText()
         } else {
