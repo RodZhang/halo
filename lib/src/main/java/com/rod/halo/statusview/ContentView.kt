@@ -14,7 +14,7 @@ class ContentView(private val contentView: View) : BaseStatusView() {
         return contentView;
     }
 
-    override fun onViewCreate(view: View) {
+    override fun onViewCreated(view: View) {
     }
 
     override fun getId() = ViewStatus.CONTENT
