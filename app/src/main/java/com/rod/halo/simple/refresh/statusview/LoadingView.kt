@@ -2,6 +2,7 @@ package com.rod.halo.simple.refresh.statusview
 
 import android.content.Context
 import android.view.View
+import android.view.ViewGroup
 import android.widget.TextView
 import com.rod.halo.statusview.BaseStatusView
 import com.rod.halo.statusview.StatusView
@@ -25,7 +26,7 @@ class LoadingView(private val context: Context) : BaseStatusView() {
         postChangeText()
     }
 
-    override fun inflateView(): View {
+    override fun onCreateView(parent: ViewGroup): View {
         return with(context) {
             frameLayout {
                 mTextView = textView().lparams(wrapContent, wrapContent, android.view.Gravity.CENTER)
@@ -33,7 +34,7 @@ class LoadingView(private val context: Context) : BaseStatusView() {
         }
     }
 
-    override fun initViewInner(view: View) {
+    override fun onViewCreated(view: View) {
     }
 
     override fun onVisibleChange(visibleToUser: Boolean) {

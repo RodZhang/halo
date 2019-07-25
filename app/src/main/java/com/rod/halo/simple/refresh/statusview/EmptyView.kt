@@ -2,6 +2,7 @@ package com.rod.halo.simple.refresh.statusview
 
 import android.content.Context
 import android.view.View
+import android.view.ViewGroup
 import com.rod.halo.statusview.BaseStatusView
 import com.rod.halo.statusview.StatusView
 import com.rod.halo.statusview.ViewStatus
@@ -16,7 +17,7 @@ import org.jetbrains.anko.wrapContent
  */
 class EmptyView(private val context: Context) : BaseStatusView() {
 
-    override fun inflateView(): View {
+    override fun onCreateView(parent: ViewGroup): View {
         return with(context) {
             frameLayout {
                 textView("暂时没有数据...")
@@ -25,7 +26,7 @@ class EmptyView(private val context: Context) : BaseStatusView() {
         }
     }
 
-    override fun initViewInner(view: View) {
+    override fun onViewCreated(view: View) {
     }
 
     override fun getId() = ViewStatus.EMPTY

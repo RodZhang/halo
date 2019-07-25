@@ -41,12 +41,12 @@ class StatusHost(private val mParent: ViewGroup, val mPos: Int) {
                 return
             }
             if (getViewType() == StatusView.VIEW_TYPE_UN_REUSEABLE) {
-                initView()
+                initView(mParent)
                 return
             }
             val cacheView = mTypeView[getViewType()]
             if (cacheView == null) {
-                initView()
+                initView(mParent)
                 val view = getView()
                         ?: throw IllegalStateException("$this is inited bug getView return null")
                 mTypeView.append(getViewType(), view)

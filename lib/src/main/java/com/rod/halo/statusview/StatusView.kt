@@ -1,6 +1,7 @@
 package com.rod.halo.statusview
 
 import android.view.View
+import android.view.ViewGroup
 
 /**
  *
@@ -18,7 +19,7 @@ interface StatusView {
     /**
      * 初始化view，可以使用inflate从布局文件加载，也可以使用 new 或者像 anko 的方式创建
      */
-    fun initView()
+    fun initView(parent: ViewGroup)
 
     /**
      * 另一种初始化view的方式，用于复用
@@ -52,25 +53,25 @@ interface StatusView {
 
 abstract class BaseStatusView : StatusView {
     private var mIsInited: Boolean = false
-    protected var mView: View? = null
+    private var mView: View? = null
 
-    override fun initView() {
+    override fun initView(parent: ViewGroup) {
         if (mIsInited) {
-            throw IllegalStateException("has been inited")
+            throw IllegalStateException("initView, has been inited")
         }
-        val view = inflateView()
+        val view = onCreateView(parent)
         mView = view
-        initViewInner(view)
+        onViewCreated(view)
         mIsInited = true
     }
 
     override fun setView(view: View) {
         if (mIsInited) {
-            throw IllegalStateException("has been inited")
+            throw IllegalStateException("setView, has been inited")
         }
 
         mView = view
-        initViewInner(view)
+        onViewCreated(view)
         mIsInited = true
     }
 
@@ -82,7 +83,7 @@ abstract class BaseStatusView : StatusView {
         return mView
     }
 
-    abstract fun inflateView(): View
+    abstract fun onCreateView(parent: ViewGroup): View
 
-    abstract fun initViewInner(view: View)
+    abstract fun onViewCreated(view: View)
 }
