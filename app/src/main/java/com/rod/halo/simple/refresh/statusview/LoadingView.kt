@@ -38,7 +38,7 @@ class LoadingView(private val context: Context) : BaseStatusView() {
     override fun onViewCreated(view: View) {
     }
 
-    override fun onVisibleChange(visibleToUser: Boolean, data: Bundle) {
+    override fun onVisibleChange(visibleToUser: Boolean, data: Bundle?) {
         if (visibleToUser) {
             postChangeText()
         } else {
