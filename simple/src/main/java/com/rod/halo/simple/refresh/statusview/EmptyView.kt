@@ -1,35 +1,46 @@
 package com.rod.halo.simple.refresh.statusview
 
-import android.content.Context
+import android.support.annotation.StringRes
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import com.rod.halo.simple.R
 import com.rod.halo.statusview.BaseStatusView
-import com.rod.halo.statusview.StatusView
 import com.rod.halo.statusview.ViewStatus
-import org.jetbrains.anko.frameLayout
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.wrapContent
+import kotlinx.android.synthetic.main.common_empty_view.view.*
+import org.jetbrains.anko.layoutInflater
 
 /**
  *
  * @author Rod
- * @date 2019/5/5
+ * @date 2019-07-23
  */
-class EmptyView(private val context: Context) : BaseStatusView() {
+class EmptyView
+@JvmOverloads constructor(
+        @StringRes private val mTipResId: Int = R.string.common_empty_tip
+) : BaseStatusView() {
+
+    companion object {
+        private val LAYOUT = R.layout.common_empty_view
+    }
+
+    private var mTipTv: TextView? = null
 
     override fun onCreateView(parent: ViewGroup): View {
-        return with(context) {
-            frameLayout {
-                textView("暂时没有数据...")
-                        .lparams(wrapContent, wrapContent, android.view.Gravity.CENTER)
-            }
-        }
+        return parent.context.layoutInflater.inflate(LAYOUT, parent, false)
     }
 
     override fun onViewCreated(view: View) {
+        mTipTv = view.emptyTipTv
+        mTipTv?.setText(mTipResId)
     }
 
-    override fun getId() = ViewStatus.EMPTY
+    override fun getId(): String {
+        return ViewStatus.EMPTY
+    }
 
-    override fun getViewType() = StatusView.VIEW_TYPE_UN_REUSEABLE
+    override fun getViewType(): Int {
+        return LAYOUT
+    }
+
 }

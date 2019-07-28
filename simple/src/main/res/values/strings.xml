@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">simple</string>
+    <string name="common_empty_tip">这里空空如也~</string>
+    <string name="common_loading_tip">努力加载中~</string>
 </resources>

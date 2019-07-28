@@ -1,62 +1,40 @@
 package com.rod.halo.simple.refresh.statusview
 
-import android.content.Context
-import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.ProgressBar
+import com.rod.halo.simple.R
 import com.rod.halo.statusview.BaseStatusView
-import com.rod.halo.statusview.StatusView
 import com.rod.halo.statusview.ViewStatus
-import org.jetbrains.anko.frameLayout
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.wrapContent
+import kotlinx.android.synthetic.main.common_loading_view.view.*
+import org.jetbrains.anko.layoutInflater
 
 /**
  *
  * @author Rod
- * @date 2019/5/5
+ * @date 2019-07-24
  */
-class LoadingView(private val context: Context) : BaseStatusView() {
+class LoadingView() : BaseStatusView() {
 
-    private lateinit var mTextView: TextView
-    private var mCount = 0
-    private val mLoadingRunnable = Runnable {
-        val dotCount = mCount++ % 3 + 1
-        mTextView.text = "Loading ${getDot(dotCount)}"
-        postChangeText()
+    companion object {
+        private val LAYOUT = R.layout.common_loading_view
     }
 
+    private lateinit var mProgressBar: ProgressBar
+
     override fun onCreateView(parent: ViewGroup): View {
-        return with(context) {
-            frameLayout {
-                mTextView = textView().lparams(wrapContent, wrapContent, android.view.Gravity.CENTER)
-            }
-        }
+        return parent.context.layoutInflater.inflate(LAYOUT, parent, false)
     }
 
     override fun onViewCreated(view: View) {
+        mProgressBar = view.progressBar
     }
 
-    override fun onVisibleChange(visibleToUser: Boolean, data: Bundle?) {
-        if (visibleToUser) {
-            postChangeText()
-        } else {
-            mTextView.removeCallbacks(mLoadingRunnable)
-        }
+    override fun getId(): String {
+        return ViewStatus.LOADING
     }
 
-    override fun getId() = ViewStatus.LOADING
-
-    private fun getDot(count: Int): String {
-        var result = ""
-        (0 until count).forEach { _ -> result += "." }
-        return result
+    override fun getViewType(): Int {
+        return LAYOUT
     }
-
-    private fun postChangeText() {
-        mTextView.postDelayed(mLoadingRunnable, 333)
-    }
-
-    override fun getViewType() = StatusView.VIEW_TYPE_UN_REUSEABLE
 }
