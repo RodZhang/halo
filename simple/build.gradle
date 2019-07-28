@@ -1,20 +1,21 @@
-apply plugin: 'com.android.application'
+apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-apply plugin: 'kotlin-kapt'
-apply from: rootProject.file('dependences.gradle')
+apply from: file('../dependences.gradle')
 
 android {
     compileSdkVersion appConfig.compileSdkVersion
 
     defaultConfig {
-        applicationId "com.rod.halo"
         minSdkVersion appConfig.minSdkVersion
         targetSdkVersion appConfig.targetSdkVersion
         versionCode appConfig.versionCode
         versionName appConfig.versionName
+
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -24,19 +25,14 @@ android {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+
     implementation support.appcompat
     testImplementation test.junit
     androidTestImplementation test.runner
     androidTestImplementation test.espresso
+    androidTestImplementation test.rules
 
-    implementation support.constraint_layout
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation third.coroutines_core
-    implementation third.coroutines_android
-
-    api project(":halo-annotation")
-    kapt project(":halo-compiler")
-    api project(":halo-api")
-    api project(":simple")
+    api project(":halo:lib")
+    api third.smart_refresh
 }

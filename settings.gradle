@@ -1,1 +1,1 @@
-include ':app', ':lib', ':halo-annotation', ':halo-compiler', ':halo-api'
+include ':app', ':lib', ':halo-annotation', ':halo-compiler', ':halo-api', ':simple'

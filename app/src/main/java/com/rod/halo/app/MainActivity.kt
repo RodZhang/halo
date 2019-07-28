@@ -1,4 +1,4 @@
-package com.rod.halo.simple
+package com.rod.halo.app
 
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
