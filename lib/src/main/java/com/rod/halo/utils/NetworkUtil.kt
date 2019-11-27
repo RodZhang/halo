@@ -1,14 +1,14 @@
 package com.rod.halo.utils
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.LifecycleOwner
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import android.content.Context
 import android.content.IntentFilter
 import android.net.*
 import android.os.Build
-import android.support.annotation.RequiresApi
+import androidx.annotation.RequiresApi
 import com.rod.halo.BaseApp
 import com.rod.halo.NetworkReceiver
 

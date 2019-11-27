@@ -1,6 +1,6 @@
 package com.rod.halo.simple.refresh.statusview
 
-import android.support.annotation.StringRes
+import androidx.annotation.StringRes
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView

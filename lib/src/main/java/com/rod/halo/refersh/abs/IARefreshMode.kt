@@ -1,6 +1,6 @@
 package com.rod.halo.refersh.abs
 
-import android.support.annotation.StringDef
+import androidx.annotation.StringDef
 
 /**
  * @author Rod

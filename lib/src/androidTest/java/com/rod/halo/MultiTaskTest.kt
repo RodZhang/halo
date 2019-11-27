@@ -1,6 +1,6 @@
 package com.rod.halo
 
-import android.support.test.runner.AndroidJUnit4
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.rod.halo.mulittask.MultiTask
 import com.rod.halo.mulittask.AbsTaskUnit
 import org.junit.Test
