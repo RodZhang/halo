@@ -2,7 +2,7 @@ package com.rod.compile.parser;
 
 import android.view.View;
 
-import com.rod.annotation.OnClick;
+import com.rod.annotation.OnLongClick;
 import com.rod.compile.HaloProcessConstants;
 import com.rod.compile.ProcessHelper;
 import com.squareup.javapoet.MethodSpec;
@@ -25,11 +25,11 @@ import javax.lang.model.element.VariableElement;
 
 /**
  * @author Rod
- * @date 2019-07-07
+ * @date 2019/11/27
  */
-public class OnClickParser implements Parser {
+public class OnLongClickParser implements Parser {
 
-    private static final Class<? extends Annotation> ANNOTATION_CLASS = OnClick.class;
+    private static final Class<? extends Annotation> ANNOTATION_CLASS = OnLongClick.class;
     private ProcessingEnvironment mProcessingEnv;
 
     @Override
@@ -48,59 +48,35 @@ public class OnClickParser implements Parser {
     }
 
     @Override
-    public void parse(
-            Map<TypeElement, BindingSet.Builder> builderMap,
-            RoundEnvironment roundEnv
-    ) {
-        Set<? extends Element> elemSet = roundEnv.getElementsAnnotatedWith(ANNOTATION_CLASS);
-        if (elemSet.isEmpty()) {
+    public void parse(Map<TypeElement, BindingSet.Builder> builderMap, RoundEnvironment roundEnv) {
+        Set<? extends Element> elements = roundEnv.getElementsAnnotatedWith(ANNOTATION_CLASS);
+        if (elements == null || elements.isEmpty()) {
             return;
         }
-
-        elemSet.stream()
+        elements.stream()
                 .filter(elem -> elem != null && ((Element) elem).getKind() == ElementKind.METHOD)
                 .map(elem -> (ExecutableElement) elem)
-                .forEach(executableElem -> parseElem(builderMap, executableElem));
+                .forEach(executableElement -> parseElem(builderMap, executableElement));
     }
 
     @Override
     public void bind(int targetViewId, ExecutableElement elem, MethodSpec.Builder methodBuilder) {
         methodBuilder.addStatement("view = rootView.findViewById($L)", targetViewId);
 
-        MethodSpec.Builder innerMethodBuilder = MethodSpec.methodBuilder("onClick")
+        MethodSpec.Builder innerMethodBuilder = MethodSpec.methodBuilder("onLongClick")
                 .addModifiers(Modifier.PUBLIC)
                 .addParameter(View.class, "view", Modifier.FINAL)
                 .addAnnotation(Override.class)
-                .returns(TypeName.VOID);
+                .returns(TypeName.BOOLEAN);
         addCallStatement(innerMethodBuilder, elem);
 
         methodBuilder.addStatement(
-                "view.setOnClickListener($L)",
+                "view.setOnLongClickListener($L)",
                 TypeSpec.anonymousClassBuilder("", "")
-                        .superclass(View.OnClickListener.class)
+                        .superclass(View.OnLongClickListener.class)
                         .addMethod(innerMethodBuilder.build())
                         .build()
         );
-    }
-
-    private void addCallStatement(MethodSpec.Builder methodBuilder, ExecutableElement elem) {
-        List<? extends VariableElement> parameters = elem.getParameters();
-        if (parameters.isEmpty()) {
-            methodBuilder.addStatement("target.$L()", elem.getSimpleName());
-            return;
-        }
-        if (parameters.size() > 1) {
-            ProcessHelper.error(mProcessingEnv, "OnClick should has 0 or 1 param", elem);
-            return;
-        }
-        VariableElement param = parameters.get(0);
-        if (ProcessHelper.isSameType(param.asType(), HaloProcessConstants.VIEW_TYPE)) {
-            methodBuilder.addStatement("target.$L(view)", elem.getSimpleName());
-        } else if (ProcessHelper.isSubtypeOfType(param.asType(), HaloProcessConstants.VIEW_TYPE)) {
-            methodBuilder.addStatement("target.$L(($T) view)", elem.getSimpleName(), param.asType());
-        } else {
-            ProcessHelper.error(mProcessingEnv, "OnClick's param should be subType of View", elem);
-        }
     }
 
     private void parseElem(
@@ -115,8 +91,28 @@ public class OnClickParser implements Parser {
         TypeElement typeElement = (TypeElement) parent;
         BindingSet.Builder builder = BindingSet.getOrNewBuilder(builderMap, typeElement);
 
-        OnClick annotation = element.getAnnotation(OnClick.class);
+        OnLongClick annotation = element.getAnnotation(OnLongClick.class);
         int id = annotation.value();
         builder.putListenerMethod(id, new ListenerElem(id, element, this));
+    }
+
+    private void addCallStatement(MethodSpec.Builder methodBuilder, ExecutableElement elem) {
+        List<? extends VariableElement> parameters = elem.getParameters();
+        if (parameters.isEmpty()) {
+            methodBuilder.addStatement("return target.$L()", elem.getSimpleName());
+            return;
+        }
+        if (parameters.size() > 1) {
+            ProcessHelper.error(mProcessingEnv, "OnLongClick should has 0 or 1 param", elem);
+            return;
+        }
+        VariableElement param = parameters.get(0);
+        if (ProcessHelper.isSameType(param.asType(), HaloProcessConstants.VIEW_TYPE)) {
+            methodBuilder.addStatement("return target.$L(view)", elem.getSimpleName());
+        } else if (ProcessHelper.isSubtypeOfType(param.asType(), HaloProcessConstants.VIEW_TYPE)) {
+            methodBuilder.addStatement("return target.$L(($T) view)", elem.getSimpleName(), param.asType());
+        } else {
+            ProcessHelper.error(mProcessingEnv, "OnLongClick's param should be subType of View", elem);
+        }
     }
 }

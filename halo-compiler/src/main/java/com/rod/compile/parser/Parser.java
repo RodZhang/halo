@@ -5,6 +5,7 @@ import com.squareup.javapoet.MethodSpec;
 import java.lang.annotation.Annotation;
 import java.util.Map;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
@@ -28,12 +29,16 @@ public interface Parser {
 
     /**
      * 处理注解的具体工作
-     *
-     *
      * @param builderMap
      * @param roundEnv
      */
     void parse(Map<TypeElement, BindingSet.Builder> builderMap, RoundEnvironment roundEnv);
 
     void bind(int targetViewId, ExecutableElement elem, MethodSpec.Builder methodBuilder);
+
+    /**
+     * 注入 processingEnv，用于打印日志
+     * @param processingEnv
+     */
+    void setProcessingEnv(ProcessingEnvironment processingEnv);
 }

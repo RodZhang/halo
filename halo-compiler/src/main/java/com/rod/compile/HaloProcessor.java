@@ -3,6 +3,7 @@ package com.rod.compile;
 import com.google.auto.service.AutoService;
 import com.rod.compile.parser.BindingSet;
 import com.rod.compile.parser.OnClickParser;
+import com.rod.compile.parser.OnLongClickParser;
 import com.rod.compile.parser.Parser;
 import com.squareup.javapoet.JavaFile;
 
@@ -20,13 +21,13 @@ import javax.annotation.processing.Processor;
 import javax.annotation.processing.RoundEnvironment;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.TypeElement;
-import javax.tools.Diagnostic;
 
 @AutoService(Processor.class)
 public class HaloProcessor extends AbstractProcessor {
 
     private List<Parser> mParsers = Arrays.asList(
-            new OnClickParser()
+            new OnClickParser(),
+            new OnLongClickParser()
     );
 
     @Override
@@ -55,7 +56,10 @@ public class HaloProcessor extends AbstractProcessor {
 
     private void newWayToParse(RoundEnvironment roundEnvironment) {
         Map<TypeElement, BindingSet.Builder> builderMap = new HashMap<>();
-        mParsers.forEach(parser -> parser.parse(builderMap, roundEnvironment));
+        mParsers.forEach(parser -> {
+            parser.setProcessingEnv(processingEnv);
+            parser.parse(builderMap, roundEnvironment);
+        });
         Map<TypeElement, BindingSet> bindingSetMap = new HashMap<>(builderMap.size());
         builderMap.entrySet()
                 .forEach(entry -> {
@@ -71,13 +75,8 @@ public class HaloProcessor extends AbstractProcessor {
         try {
             javaFile.writeTo(processingEnv.getFiler());
         } catch (IOException e) {
-            error("brewJava fail", typeElement);
+            ProcessHelper.error(processingEnv, "brewJava fail", typeElement);
         }
-    }
-
-    private void error(String msg, TypeElement element) {
-        processingEnv.getMessager()
-                .printMessage(Diagnostic.Kind.ERROR, msg, element);
     }
 
 }

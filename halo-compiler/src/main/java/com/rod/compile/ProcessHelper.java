@@ -3,11 +3,13 @@ package com.rod.compile;
 import java.util.List;
 import java.util.Objects;
 
+import javax.annotation.processing.ProcessingEnvironment;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.DeclaredType;
 import javax.lang.model.type.TypeKind;
 import javax.lang.model.type.TypeMirror;
+import javax.tools.Diagnostic;
 
 /**
  * @author Rod
@@ -16,7 +18,7 @@ import javax.lang.model.type.TypeMirror;
 public final class ProcessHelper {
 
     public static boolean isSubtypeOfType(TypeMirror typeMirror, String type) {
-        if (Objects.equals(typeMirror.toString(), type)) {
+        if (isSameType(typeMirror, type)) {
             return true;
         }
 
@@ -68,4 +70,11 @@ public final class ProcessHelper {
         return false;
     }
 
+    public static boolean isSameType(TypeMirror typeMirror, String type) {
+        return Objects.equals(typeMirror.toString(), type);
+    }
+
+    public static void error(ProcessingEnvironment processingEnv, String msg, Element element) {
+        processingEnv.getMessager().printMessage(Diagnostic.Kind.ERROR, msg, element);
+    }
 }
