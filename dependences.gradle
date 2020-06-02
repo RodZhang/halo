@@ -2,7 +2,7 @@ ext {
     appConfig = [
             compileSdkVersion: 28,
             minSdkVersion    : 19,
-            targetSdkVersion : 26,
+            targetSdkVersion : 28,
             versionCode      : 1,
             versionName      : "1.0"
     ]
@@ -19,6 +19,7 @@ ext {
             auto_common       : "0.10",
             javapoet          : "1.10.0",
             androidx          : "1.1.0",
+            room_version      : '2.2.5'
     ]
 
     support = [
@@ -28,7 +29,9 @@ ext {
     ]
 
     androidx = [
-            annotations: "androidx.annotation:annotation:${depVer.androidx}",
+            annotations  : "androidx.annotation:annotation:${depVer.androidx}",
+            room_runtime : "androidx.room:room-runtime:${depVer.room_version}",
+            room_compiler: "androidx.room:room-compiler:${depVer.room_version}"
     ]
 
     compileAndroid = "com.google.android:android:4.1.1.4"
@@ -41,15 +44,19 @@ ext {
     ]
 
     third = [
-            kotlin            : "org.jetbrains.kotlin:kotlin-stdlib-jdk7: ${kotlin_version}",
-            smart_refresh     : "com.scwang.smartrefresh:SmartRefreshLayout:${depVer.smart_refresh}",
-            coroutines_core   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${depVer.kotlinx_coroutines}",
-            coroutines_android: "org.jetbrains.kotlinx:kotlinx-coroutines-android:${depVer.kotlinx_coroutines}",
+            kotlin                   : "org.jetbrains.kotlin:kotlin-stdlib-jdk7: ${kotlin_version}",
+            smart_refresh            : "com.scwang.smartrefresh:SmartRefreshLayout:${depVer.smart_refresh}",
+            kotlin_coroutines_core   : "org.jetbrains.kotlinx:kotlinx-coroutines-core:${depVer.kotlinx_coroutines}",
+            kotlin_coroutines_android: "org.jetbrains.kotlinx:kotlinx-coroutines-android:${depVer.kotlinx_coroutines}",
             // AutoService会自动在META-INF文件夹下生成Processor配置信息文件，该文件里就是实现该服务接口的具体实现类。
             // 而当外部程序装配这个模块的时候，就能通过该jar包META-INF/services/里的配置文件找到具体的实现类名，并装载实例化，完成模块的注入。
             // 基于这样一个约定就能很好的找到服务接口的实现类，而不需要再代码里制定，方便快捷。
-            auto_service      : "com.google.auto.service:auto-service:${depVer.auto_service}",
-            auto_common       : "com.google.auto:auto-common:${depVer.auto_common}",
-            javapoet          : "com.squareup:javapoet:${depVer.javapoet}"
+            auto_service             : "com.google.auto.service:auto-service:${depVer.auto_service}",
+            auto_common              : "com.google.auto:auto-common:${depVer.auto_common}",
+            javapoet                 : "com.squareup:javapoet:${depVer.javapoet}"
+    ]
+
+    debug = [
+            stetho: "com.facebook.stetho:stetho:1.5.0"
     ]
 }

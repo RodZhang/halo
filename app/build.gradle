@@ -32,8 +32,8 @@ dependencies {
 
     implementation support.constraint_layout
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation third.coroutines_core
-    implementation third.coroutines_android
+    implementation third.kotlin_coroutines_core
+    implementation third.kotlin_coroutines_android
 
     api project(":halo-annotation")
     kapt project(":halo-compiler")

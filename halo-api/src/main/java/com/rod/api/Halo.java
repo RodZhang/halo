@@ -19,7 +19,7 @@ public class Halo {
         Log.d("Halo", "inject");
         try {
             Class<?> injector = Class.forName(activity.getClass().getName() + "_ViewBinding");
-            Constructor inject = injector.getConstructor(activity.getClass());
+            Constructor<?> inject = injector.getConstructor(activity.getClass());
             inject.newInstance(activity);
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,7 +30,7 @@ public class Halo {
     public static void inject(Object target, View view) {
         try {
             Class<?> injector = Class.forName(target.getClass().getName() + "_ViewBinding");
-            Constructor inject = injector.getConstructor(target.getClass(), View.class);
+            Constructor<?> inject = injector.getConstructor(target.getClass(), View.class);
             inject.newInstance(target, view);
         } catch (Exception e) {
             e.printStackTrace();
