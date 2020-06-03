@@ -19,12 +19,14 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout
 class SmartRefreshLayoutAdapter : RefreshLayoutAdapter {
 
     private var mSmartRefreshLayout: SmartRefreshLayout? = null
+    private var mRefreshMode = RefreshMode.DISABLE
 
     @SuppressLint("InflateParams")
     override fun getRefreshLayout(context: Context): ViewGroup {
         if (mSmartRefreshLayout == null) {
             mSmartRefreshLayout = LayoutInflater.from(context)
                     .inflate(R.layout.common_smart_refresh_layout, null) as SmartRefreshLayout
+            setMode(mRefreshMode)
         }
         return mSmartRefreshLayout as ViewGroup
     }
@@ -42,6 +44,10 @@ class SmartRefreshLayoutAdapter : RefreshLayoutAdapter {
     }
 
     override fun setMode(@IARefreshMode refreshMode: String) {
+        mRefreshMode = refreshMode
+        if (mSmartRefreshLayout == null) {
+            return
+        }
         when (refreshMode) {
             RefreshMode.DISABLE -> setEnableMode(false, false)
             RefreshMode.PULL_DOWN_ONLY -> setEnableMode(true, false)

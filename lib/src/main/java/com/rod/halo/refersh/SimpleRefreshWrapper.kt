@@ -3,6 +3,7 @@ package com.rod.halo.refersh
 import android.view.View
 import android.view.ViewGroup
 import com.rod.halo.refersh.abs.RefreshLayoutAdapter
+import com.rod.halo.refersh.abs.RefreshMode
 import com.rod.halo.refersh.abs.RefreshWrapper
 import com.rod.halo.statusview.ContentView
 import com.rod.halo.statusview.StatusView
@@ -26,6 +27,7 @@ class SimpleRefreshWrapper internal constructor() : RefreshWrapper {
     override fun wrapper(refreshLayoutAdapter: RefreshLayoutAdapter, contentView: View) {
         mRefreshLayoutAdapter = refreshLayoutAdapter
         val refreshLayout = refreshLayoutAdapter.getRefreshLayout(contentView.context)
+        mRefreshLayoutAdapter.setMode(RefreshMode.DISABLE)
         replaceView(contentView, refreshLayout)
     }
 
