@@ -9,6 +9,11 @@ dependencies {
 
     compileOnly third.auto_service
     compileOnly compileAndroid
+    // 由于 gradle 版本问题，在低版本上（不确定是哪个版本，之前用的是 4.10.3）不用加这个 annotationProcessor 声明
+    // 也能自动生成 META-INF 文件，但是升级到 6.1.1 之后，不加这个声明，就不会自动为我们生成 META-INF 这个文件，导致注解失效
+    // 原因是：Gradle 5 之后会忽略 compile classpath 中的 annotationProcessor，所以需要手动添加
+    // 通过声明 annotationProcessor 把它添加到 annotation processor path 下。
+    annotationProcessor third.auto_service
     implementation third.auto_common
     implementation third.javapoet
     api project(":halo:halo-annotation")
