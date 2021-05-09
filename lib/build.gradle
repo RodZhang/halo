@@ -34,16 +34,4 @@ dependencies {
     androidTestImplementation test.espresso
     androidTestImplementation test.rules
     api "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-
-    // Anko Commons
-    api "org.jetbrains.anko:anko-commons:0.10.8"
-
-    // Anko Layouts
-    api "org.jetbrains.anko:anko-sdk25:0.10.8" // sdk15, sdk19, sdk21, sdk23 are also available
-    api "org.jetbrains.anko:anko-appcompat-v7:0.10.8"
-
-    // Coroutine listeners for Anko Layouts
-    api "org.jetbrains.anko:anko-sdk25-coroutines:0.10.8"
-    api "org.jetbrains.anko:anko-appcompat-v7-coroutines:0.10.8"
-
 }

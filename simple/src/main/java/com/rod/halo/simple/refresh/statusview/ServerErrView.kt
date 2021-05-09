@@ -1,14 +1,13 @@
 package com.rod.halo.simple.refresh.statusview
 
 import android.content.Context
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.rod.halo.simple.R
 import com.rod.halo.statusview.BaseStatusView
 import com.rod.halo.statusview.StatusView
 import com.rod.halo.statusview.ViewStatus
-import org.jetbrains.anko.frameLayout
-import org.jetbrains.anko.textView
-import org.jetbrains.anko.wrapContent
 
 /**
  *
@@ -18,11 +17,7 @@ import org.jetbrains.anko.wrapContent
 class ServerErrView(private val context: Context) : BaseStatusView() {
 
     override fun onCreateView(parent: ViewGroup): View {
-        return with(context) {
-            frameLayout {
-                textView("请求服务器失败").lparams(wrapContent, wrapContent, android.view.Gravity.CENTER)
-            }
-        }
+        return LayoutInflater.from(context).inflate(R.layout.state_server_error, parent, false)
     }
 
     override fun onViewCreated(view: View) {

@@ -1,5 +1,6 @@
 package com.rod.halo.simple.refresh.statusview
 
+import android.view.LayoutInflater
 import androidx.annotation.StringRes
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +9,6 @@ import com.rod.halo.simple.R
 import com.rod.halo.statusview.BaseStatusView
 import com.rod.halo.statusview.ViewStatus
 import kotlinx.android.synthetic.main.common_empty_view.view.*
-import org.jetbrains.anko.layoutInflater
 
 /**
  *
@@ -17,7 +17,7 @@ import org.jetbrains.anko.layoutInflater
  */
 class EmptyView
 @JvmOverloads constructor(
-        @StringRes private val mTipResId: Int = R.string.common_empty_tip
+    @StringRes private val mTipResId: Int = R.string.common_empty_tip
 ) : BaseStatusView() {
 
     companion object {
@@ -27,7 +27,7 @@ class EmptyView
     private var mTipTv: TextView? = null
 
     override fun onCreateView(parent: ViewGroup): View {
-        return parent.context.layoutInflater.inflate(LAYOUT, parent, false)
+        return LayoutInflater.from(parent.context).inflate(LAYOUT, parent, false)
     }
 
     override fun onViewCreated(view: View) {

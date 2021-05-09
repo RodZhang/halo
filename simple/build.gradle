@@ -35,4 +35,5 @@ dependencies {
 
     api project(":halo:lib")
     api third.smart_refresh
+    implementation 'androidx.activity:activity-ktx:1.2.2'
 }

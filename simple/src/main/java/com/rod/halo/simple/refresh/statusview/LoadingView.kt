@@ -1,5 +1,6 @@
 package com.rod.halo.simple.refresh.statusview
 
+import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
@@ -7,7 +8,6 @@ import com.rod.halo.simple.R
 import com.rod.halo.statusview.BaseStatusView
 import com.rod.halo.statusview.ViewStatus
 import kotlinx.android.synthetic.main.common_loading_view.view.*
-import org.jetbrains.anko.layoutInflater
 
 /**
  *
@@ -23,7 +23,7 @@ class LoadingView() : BaseStatusView() {
     private lateinit var mProgressBar: ProgressBar
 
     override fun onCreateView(parent: ViewGroup): View {
-        return parent.context.layoutInflater.inflate(LAYOUT, parent, false)
+        return LayoutInflater.from(parent.context).inflate(LAYOUT, parent, false)
     }
 
     override fun onViewCreated(view: View) {
